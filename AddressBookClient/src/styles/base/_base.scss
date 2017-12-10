@@ -1,0 +1,27 @@
+.app {
+  background-color: #ededed;
+}
+
+.container-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-container {
+  display: flex;
+  height: 300px;
+
+  img {
+    flex: 1;
+    padding: 50px;
+  }
+}
+
+button {
+  background-color: blue;
+}
+
+a {
+  font-weight: bold;
+  text-decoration: none;
+}

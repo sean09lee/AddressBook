@@ -1,0 +1,9 @@
+AddressBookClient/node_modules
+AddressBookClient/dist
+AddressBookClient/package-lock.json
+AddressBookClient/.vscode
+AddressBookClient/**/*.css
+AddressBookService/.vs
+AddressBookService/bin
+AddressBookService/obj
+AddressBookService/packages
