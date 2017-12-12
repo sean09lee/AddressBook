@@ -11,23 +11,18 @@ class Home extends Component {
     super(props);
     this.state = {
       contact: []
-		}
+    }
   }
-  
-  myCallback = (dataFromChild) => {
-    //[...we will use the dataFromChild here...]
-    this.setState({ contact: dataFromChild });
-  }
-  
+
   render() {
     return (
       <div className="home">
         <div className="container">
-          <HeaderBar className="item" />
+          <HeaderBar className="item" history={this.props.history} />
         </div>
         <div className="container">
           <ContactList className="item" />
-          <ContactCard className="item" />
+          <ContactCard className="item" contact={this.state.contact}/>
         </div>
       </div>
     );

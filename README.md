@@ -13,5 +13,5 @@ Additionally, WebAPI 2 provides some nice functionality over its predecessor.
 
 ## Back-End Database: Microsoft SQL Express 2017
 Why? Relational over non-relational for the future considerations of application expansion. Say for example, we want to modify the kind of data stored in relation to each user (i.e. alternate address, nickname), or expand the usage of the application to recommend users based on networks. This would mean complex join queries on multiple tables and massive document updates for additional properties vs. column updates to lookup tables. 
-Microsoft SQL over any other *.SQL language because it plays nicely with .NET Core 
+Microsoft SQL over any other *.SQL language because it plays nicely with .NET 
 At this point, we also do not need to prioritize speed so it does not make sense to use non-relational. 

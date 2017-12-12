@@ -1,15 +1,27 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
+import DefaultAvatar from '../../../assets/default_avatar.jpg';
 
-export default class ContactCard extends Component {
-
+class ContactCard extends Component {
   constructor(props) {
     super(props);
+    var newContact = {
+      ContactFirstName: 'test',
+      ContactLastName: 'last'
+    };
     this.state = {
       expanded: false,
+      contact: newContact
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      contact: nextProps
+    });
   }
 
   handleExpandChange = (expanded) => {
@@ -30,40 +42,28 @@ export default class ContactCard extends Component {
 
   render() {
     return (
-      <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
+      <Card>
         <CardHeader
-          title="URL Avatar"
+          title={this.state.contact.ContactFirstName}
           subtitle="Subtitle"
-          avatar="images/ok-128.jpg"
-          actAsExpander={true}
-          showExpandableButton={true}
+          avatar={DefaultAvatar}
+          actAsExpander={false}
+          showExpandableButton={false}
         />
-        <CardText>
-          <Toggle
-            toggled={this.state.expanded}
-            onToggle={this.handleToggle}
-            labelPosition="right"
-            label="This toggle controls the expanded state of the component."
-          />
-        </CardText>
-        <CardMedia
-          expandable={true}
-          overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-        >
-          <img src="images/nature-600-337.jpg" alt="" />
-        </CardMedia>
-        <CardTitle title="Title" subtitle="Card subtitle" expandable={true} />
-        <CardText expandable={true}>
+        <CardTitle title="Title" subtitle="Card subtitle" />
+        <CardText >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
           Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
           Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
         </CardText>
-        <CardActions>
-          <FlatButton label="Expand" onClick={this.handleExpand} />
-          <FlatButton label="Reduce" onClick={this.handleReduce} />
-        </CardActions>
       </Card>
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => { 
+  return state.items;
+}
+
+export default connect(mapStateToProps)(ContactCard);

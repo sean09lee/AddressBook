@@ -3,10 +3,7 @@ import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
 import AuthUtil from '../../../utilities/AuthUtil';
-
-function handleClick() {
-  alert('onClick triggered on the title component');
-}
+import DefaultAvatar from '../../../assets/default_avatar.jpg';
  
 const styles = {
   title: {
@@ -16,7 +13,8 @@ const styles = {
 
 export default class HeaderBar extends Component {
 	constructor(props){
-		super(props)
+		super(props);
+		this.logout = this.logout.bind(this);
 	}
 
 	logout() {
@@ -28,9 +26,8 @@ export default class HeaderBar extends Component {
 		return (
 			<AppBar
 				title={<span style={styles.title}>Title</span>}
-				onTitleClick={handleClick}
-				iconElementLeft={<Avatar src="images/ok-404error.jpg" />}
-				iconElementRight={<FlatButton label="Logout" />}
+				iconElementLeft={<Avatar src={DefaultAvatar} />}
+				iconElementRight={<FlatButton label="Logout" onClick={this.logout} />}
 			/>
 		);
 	}
