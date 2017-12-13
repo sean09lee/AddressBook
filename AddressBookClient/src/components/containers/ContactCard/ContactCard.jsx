@@ -11,65 +11,73 @@ import SaveContact from '../../buttons/SaveContact/SaveContact.jsx';
 import './_contactCard.scss';
 
 class ContactCard extends Component {
-  constructor(props) {
-    super(props);
-    var newContact = {
-      ContactFirstName: 'test',
-      ContactLastName: 'last',
-      ContactNotes: ''
-    };
-    this.state = {
-      contact: newContact,
-      editMode: false
-    };
-  }
+	constructor(props) {
+		super(props);
+		var defaultContact = {
+			ContactFirstName: '',
+			ContactMiddleName: '', 
+			ContactLastName: '',
+			ContactNotes: ''
+		};
+		if (this.props.contact && this.props.contact.length > 0){
+			defaultContact = this.props.contact;
+		}
+		this.state = {
+			contact: defaultContact,
+			editMode: false
+		};
+	}
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      contact: nextProps.contact,
-      editMode: nextProps.editMode
-    });
-  }
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			contact: nextProps.contact,
+			editMode: nextProps.editMode
+		});
+	}
 
-  render() {
-    if (this.state.editMode){
-      return (
-        <EditContactCard />
-      )
-    }
+	render() {
+		if (this.state.editMode){
+			return (
+				<EditContactCard />
+			)
+		}
 
-    //else
-    return (
-      <Card>
-        <CardHeader
-          title={this.state.contact.ContactFirstName + this.state.contact.ContactLastName}
-          subtitle="Subtitle"
-          avatar={DefaultAvatar}
-          actAsExpander={false}
-          showExpandableButton={false}
-        />
-        <CardTitle title="Title" subtitle="Card subtitle" />
-        <CardText >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-          Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-          Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-        </CardText>
-        <CardActions className="flex-container">
-          <DeleteContact contact={this.state.contact} />
-          <EditContact contact={this.state.contact}/>
-          <SaveContact contact={this.state.contact} />
-        </CardActions>
-      </Card>
-    );
-  }
+		let DeleteButton = null;
+		if (this.state.contact.ContactId){
+			DeleteButton =	<DeleteContact contactId={this.state.contact.ContactId}/>;
+		}
+
+		//else
+		return (
+			<Card>
+				<CardHeader
+					title={this.state.contact.ContactFirstName + this.state.contact.ContactLastName}
+					subtitle="Subtitle"
+					avatar={DefaultAvatar}
+					actAsExpander={false}
+					showExpandableButton={false}
+				/>
+				<CardTitle title="Title" subtitle="Card subtitle" />
+				<CardText >
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+					Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
+					Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
+					Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+				</CardText>
+				<CardActions className="flex-container">
+					{DeleteButton}
+					<EditContact contact={this.state.contact} />
+				</CardActions>
+			</Card>
+		);
+	}
 }
 
 const mapStateToProps = (state) => { 
-  return {
-    contact: state.selectedContact,
-    editMode: state.isEditMode
-  };
+	return {
+		contact: state.selectedContact,
+		editMode: state.isEditMode
+	};
 }
 
 export default connect(mapStateToProps)(ContactCard);

@@ -1,26 +1,43 @@
 import React, { Component } from 'react';
-import SearchBar from 'material-ui-search-bar';
+import { dispatch, connect } from 'react-redux';
+import { setContacts, setFilteredContacts } from '../../../utilities/Actions';
+import MaterialSearchBar from 'material-ui-search-bar';
 
 class SearchBar extends Component {
 	constructor(props){
-		super(props)
+		super(props);
 		this.state = {
 			requestFailed: false,
 			contacts: [],
-			contactDetails: [],
-			searchTerm
-		}
+			filteredContacts: [],
+			searchTerm: ""
+		};
+
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSearchRequest = this.handleSearchRequest.bind(this);
 	}
 
-	handleChange(){
-		console.log(this.state.searchTerm);
+	handleChange(newValue){
+		this.setState({ searchTerm: newValue });
+		var caseInsensitiveSearchTerm = newValue.toLowerCase();
+		var contactList = this.props.contacts;
+		var filteredList = contactList.filter(
+			contact => contact.ContactFirstName.toLowerCase().includes(caseInsensitiveSearchTerm)
+		);
+		this.props.fetchFilteredData(filteredList);
+	}
+
+	handleSearchRequest(){
+		console.log('search requested');
+		// get all contacts unfiltered
+		this.props.fetchData(this.props.contacts);
 	}
 
 	render(){
 		return (
-			<SearchBar
-				onChange={() => console.log('onChange')}
-				onRequestSearch={() => console.log('onRequestSearch')}
+			<MaterialSearchBar
+				onChange={(newValue) => this.handleChange(newValue)}
+				onRequestSearch={() => this.handleSearchRequest}
 				style={{
 					margin: '0 auto',
 					maxWidth: 800
@@ -31,5 +48,18 @@ class SearchBar extends Component {
 	}
 }
 
-export default SearchBar;
-//export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
+const mapStateToProps = (state) => {
+    return {
+		contacts: state.allContacts,
+		filteredContacts: state.allFilteredContacts
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+		fetchData: (contact) => dispatch(setContacts(contact)),
+		fetchFilteredData: (contacts) => dispatch(setFilteredContacts(contacts))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

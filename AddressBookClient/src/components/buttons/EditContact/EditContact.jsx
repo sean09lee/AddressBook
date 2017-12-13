@@ -30,19 +30,19 @@ class EditContact extends Component {
 }
 
 EditContact.propTypes = {
-    enableEdit: PropTypes.func.isRequired
+	enableEdit: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
-    return {
-        editMode: state.isEditMode
-    };
+	return {
+		editMode: state.isEditMode
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        enableEdit: (bool) => dispatch(setEditMode(bool))
-    };
+	return {
+		enableEdit: (bool) => dispatch(setEditMode(bool))
+	};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditContact);
