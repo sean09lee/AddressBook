@@ -21,8 +21,10 @@ class SearchBar extends Component {
 		this.setState({ searchTerm: newValue });
 		var caseInsensitiveSearchTerm = newValue.toLowerCase();
 		var contactList = this.props.contacts;
-		var filteredList = contactList.filter(
-			contact => contact.ContactFirstName.toLowerCase().includes(caseInsensitiveSearchTerm)
+		var filteredList = contactList.filter(contact => (
+			contact.ContactFirstName.trim().toLowerCase() 
+			+ " " + contact.ContactFirstName.trim().toLowerCase())
+			.includes(caseInsensitiveSearchTerm)
 		);
 		this.props.fetchFilteredData(filteredList);
 	}
@@ -30,7 +32,7 @@ class SearchBar extends Component {
 	handleSearchRequest(){
 		console.log('search requested');
 		// get all contacts unfiltered
-		this.props.fetchData(this.props.contacts);
+		this.props.fetchFilteredData(this.props.contacts);
 	}
 
 	render(){
@@ -49,17 +51,17 @@ class SearchBar extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {
+	return {
 		contacts: state.allContacts,
 		filteredContacts: state.allFilteredContacts
-    };
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {
+	return {
 		fetchData: (contact) => dispatch(setContacts(contact)),
 		fetchFilteredData: (contacts) => dispatch(setFilteredContacts(contacts))
-    };
+	};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
