@@ -1,6 +1,7 @@
+const userEndpoint = 'http://dev.addressbookservice.com/api/users';
+
 export function saveUser(contact){
-	var endpoint = 'http://dev.addressbookservice.com/api/users/';
-	fetch(endpoint, {
+	fetch(userEndpoint, {
 		method: 'POST',
 		headers: {
 		  'Accept': 'application/json',
@@ -15,8 +16,7 @@ export function saveUser(contact){
 }
 
 export function getUser(contact){
-	var endpoint = 'http://dev.addressbookservice.com/api/contacts/';
-	fetch(endpoint, {
+	fetch(userEndpoint, {
 		method: 'POST',
 		headers: {
 		  'Accept': 'application/json',

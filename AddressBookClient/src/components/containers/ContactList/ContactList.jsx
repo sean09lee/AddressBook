@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { dispatch, connect } from 'react-redux';
-import { setContact, setContacts, setEditMode, setFilteredContacts } from '../../../utilities/Actions';
-import TearSheet from '../TearSheet/TearSheet.jsx';
+import { setContact, setContacts, setEditMode } from '../../../utilities/Actions';
+import { getContacts } from '../../../services/ContactService';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
@@ -12,6 +12,8 @@ import Delete from 'material-ui/svg-icons/action/delete';
 import IconButton from 'material-ui/IconButton';
 import DefaultAvatar from '../../../assets/default_avatar.jpg';
 import SearchBar from '../SearchBar/SearchBar.jsx';
+import TearSheet from '../TearSheet/TearSheet.jsx';
+import RefreshButton from '../../buttons/RefreshButton/RefreshButton.jsx';
 
 class ContactList extends Component {
 	constructor(props){
@@ -29,13 +31,12 @@ class ContactList extends Component {
 
 	componentDidMount(){
 		//initialize subscription here
-		fetch('http://dev.addressbookservice.com/api/contacts')
-			.then(results => {
-				return results.json();
+		getContacts().then(results => {
+			return results.json();
 		}).then(data => {
 			this.props.setContacts(data);
 			this.setState({data: data});
-		});
+		})
 	};
 
 	render() {
@@ -85,8 +86,8 @@ class ContactList extends Component {
 					/>
 				<div className="flex-container">
 					<RaisedButton label="Add" primary={true} className="flex-item"/>
-					<RaisedButton label="Delete" primary={true} className="flex-item"/>
-					<RaisedButton label="Select All" primary={true} className="flex-item"/>
+					<RaisedButton label="Delete All" primary={true} className="flex-item"/>
+					<RefreshButton />
 				</div>
 				<List>
 					<Subheader>Contacts</Subheader>
@@ -132,7 +133,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		setContact: (contact) => dispatch(setContact(contact)),
 		setContacts: (contacts) => dispatch(setContacts(contacts)),
-		setFilteredContacts: (filteredContacts) => dispatch(setFilteredContacts(filteredContacts)),
 		setEditMode: (bool) => dispatch(setEditMode(bool))
 	};
 };
