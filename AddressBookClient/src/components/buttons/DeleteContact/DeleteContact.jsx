@@ -25,6 +25,8 @@ class DeleteContact extends Component {
 			// reset the redux props
 			this.props.setContacts(contacts);
 			this.props.setFilteredContacts(filteredContacts);
+
+			console.log('Contact deleted.');
 		}
 		else {
 			alert('Oh no! Something went wrong. Please try again.');

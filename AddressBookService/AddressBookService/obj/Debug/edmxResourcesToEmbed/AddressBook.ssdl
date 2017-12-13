@@ -1,5 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="AddressBookModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="__MigrationHistory">
+    <Key>
+      <PropertyRef Name="MigrationId" />
+      <PropertyRef Name="ContextKey" />
+    </Key>
+    <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+    <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+  </EntityType>
   <EntityType Name="Address">
     <Key>
       <PropertyRef Name="AddressId" />
@@ -13,6 +23,7 @@
     <Property Name="AddressState" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="AddressZip" Type="int" Nullable="false" />
     <Property Name="AddressCountry" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="AddressModified" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="AddressType">
     <Key>
@@ -21,26 +32,20 @@
     <Property Name="AddressTypeId" Type="int" Nullable="false" />
     <Property Name="AddressTypeCode" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="AddressTypeDescription" Type="varchar" MaxLength="50" />
+    <Property Name="AddressTypeModified" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="Contact">
     <Key>
       <PropertyRef Name="ContactId" />
     </Key>
     <Property Name="ContactId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ContactFirstName" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="ContactMiddleName" Type="nchar" MaxLength="10" />
-    <Property Name="ContactLastName" Type="nchar" MaxLength="10" Nullable="false" />
-    <Property Name="ContactNickname" Type="nchar" MaxLength="10" />
-    <Property Name="ContactModified" Type="datetime" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Contacts">
-    <Key>
-      <PropertyRef Name="ContactId" />
-    </Key>
-    <Property Name="ContactId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ContactFirstName" Type="nvarchar(max)" />
-    <Property Name="ContactMiddleName" Type="nvarchar(max)" />
-    <Property Name="ContactLastName" Type="nvarchar(max)" />
+    <Property Name="ContactFirstName" Type="varchar" MaxLength="50" />
+    <Property Name="ContactMiddleName" Type="varchar" MaxLength="50" />
+    <Property Name="ContactLastName" Type="varchar" MaxLength="50" />
+    <Property Name="ContactNickname" Type="varchar" MaxLength="50" />
+    <Property Name="ContactCompany" Type="varchar" MaxLength="50" />
+    <Property Name="ContactTitle" Type="varchar" MaxLength="50" />
+    <Property Name="ContactNotes" Type="varchar(max)" />
     <Property Name="ContactModified" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="Email">
@@ -53,15 +58,6 @@
     <Property Name="EmailTypeId" Type="int" Nullable="false" />
     <Property Name="EmailModified" Type="datetime" Nullable="false" />
   </EntityType>
-  <EntityType Name="Emails">
-    <Key>
-      <PropertyRef Name="EmailId" />
-    </Key>
-    <Property Name="EmailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="EmailAddress" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="EmailType" Type="nvarchar(max)" />
-    <Property Name="EmailModified" Type="datetime" Nullable="false" />
-  </EntityType>
   <EntityType Name="EmailType">
     <Key>
       <PropertyRef Name="EmailTypeId" />
@@ -70,6 +66,28 @@
     <Property Name="EmailTypeCode" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="EmailTypeDescription" Type="varchar(max)" />
     <Property Name="EmailTypeModified" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserContact">
+    <Key>
+      <PropertyRef Name="UserContactId" />
+    </Key>
+    <Property Name="UserContactId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UsersId" Type="int" Nullable="false" />
+    <Property Name="ContactId" Type="int" Nullable="false" />
+    <Property Name="IsUser" Type="tinyint" Nullable="false" />
+    <Property Name="UserContactModified" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UsersId" />
+    </Key>
+    <Property Name="UsersId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UsersFirstName" Type="varchar(max)" />
+    <Property Name="UsersMiddleName" Type="varchar(max)" />
+    <Property Name="UsersLastName" Type="varchar(max)" />
+    <Property Name="UsersEmail" Type="varchar(max)" Nullable="false" />
+    <Property Name="UsersPassword" Type="varchar(max)" Nullable="false" />
+    <Property Name="UsersModified" Type="datetime" Nullable="false" />
   </EntityType>
   <Association Name="FK_AddressType_Address">
     <End Role="AddressType" Type="Self.AddressType" Multiplicity="1" />
@@ -107,14 +125,51 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Email_EmailType">
+    <End Role="EmailType" Type="Self.EmailType" Multiplicity="1" />
+    <End Role="Email" Type="Self.Email" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EmailType">
+        <PropertyRef Name="EmailTypeId" />
+      </Principal>
+      <Dependent Role="Email">
+        <PropertyRef Name="EmailTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserContact_Contact">
+    <End Role="Contact" Type="Self.Contact" Multiplicity="1" />
+    <End Role="UserContact" Type="Self.UserContact" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Contact">
+        <PropertyRef Name="ContactId" />
+      </Principal>
+      <Dependent Role="UserContact">
+        <PropertyRef Name="ContactId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserContact_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="UserContact" Type="Self.UserContact" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UsersId" />
+      </Principal>
+      <Dependent Role="UserContact">
+        <PropertyRef Name="UsersId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="AddressBookModelStoreContainer">
+    <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AddressType" EntityType="Self.AddressType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Contact" EntityType="Self.Contact" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Contacts" EntityType="Self.Contacts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Email" EntityType="Self.Email" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Emails" EntityType="Self.Emails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="EmailType" EntityType="Self.EmailType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserContact" EntityType="Self.UserContact" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_AddressType_Address" Association="Self.FK_AddressType_Address">
       <End Role="AddressType" EntitySet="AddressType" />
       <End Role="Address" EntitySet="Address" />
@@ -126,6 +181,18 @@
     <AssociationSet Name="FK_Contact_Email" Association="Self.FK_Contact_Email">
       <End Role="Contact" EntitySet="Contact" />
       <End Role="Email" EntitySet="Email" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Email_EmailType" Association="Self.FK_Email_EmailType">
+      <End Role="EmailType" EntitySet="EmailType" />
+      <End Role="Email" EntitySet="Email" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserContact_Contact" Association="Self.FK_UserContact_Contact">
+      <End Role="Contact" EntitySet="Contact" />
+      <End Role="UserContact" EntitySet="UserContact" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserContact_Users" Association="Self.FK_UserContact_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserContact" EntitySet="UserContact" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

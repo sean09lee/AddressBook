@@ -1,4 +1,5 @@
 ﻿using AddressBookService.Models;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -18,59 +19,89 @@ namespace AddressBookService.Controllers
         // GET api/user
         public async Task<IHttpActionResult> Get()
         {
-            var contactList = await db.Contacts.ToListAsync();
-            if (contactList == null)
+            var users = await db.Users.ToListAsync();
+            if (users == null)
             {
                 return NotFound();
             }
             // order by lastname, firstname, company
-            var contacts = contactList.OrderBy(x => x.ContactLastName).ThenBy(x => x.ContactFirstName);
+            var contacts = users.OrderBy(x => x.UsersLastName).ThenBy(x => x.UsersFirstName);
             return Ok(contacts);
         }
 
-        // GET api/user/5
-        [ResponseType(typeof(Contact))]
+        // GET api/user?id=5
+        [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> Get(int id)
         {
-            Contact contact = await db.Contacts.FindAsync(id);
-            if (contact == null)
+            User user = await db.Users.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return Ok(contact);
+            return Ok(user);
+        }
+
+        // GET api/user?user={}
+        [ResponseType(typeof(User))]
+        public async Task<IHttpActionResult> Get(string email, string password)
+        {
+            var selectedUser = await db.Users.Where(x => x.UsersEmail == email && x.UsersPassword == password).FirstOrDefaultAsync();
+            if (selectedUser == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(selectedUser);
         }
 
         // POST api/user
         [ResponseType(typeof(Contact))]
-        public async Task<IHttpActionResult> Post(Contact contact)
+        public async Task<IHttpActionResult> Post(User user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Contacts.Add(contact);
-            await db.SaveChangesAsync();
+            try
+            {
+                // check if existing user by email
+                var existingUser = await db.Users.Where(x => x.UsersEmail == user.UsersEmail).FirstOrDefaultAsync();
+                if (existingUser != null)
+                {
+                    return BadRequest();
+                }
 
-            return CreatedAtRoute("DefaultApi", new { id = contact.ContactId }, contact);
+                // save to db
+                user.UsersModified = DateTime.Now;
+                db.Users.Add(user);
+                await db.SaveChangesAsync();
+
+                return CreatedAtRoute("DefaultApi", new { id = user.UsersId}, user);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
         // PUT api/user/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Put(int id, Contact contact)
+        public async Task<IHttpActionResult> Put(int id, User user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != contact.ContactId)
+            if (id != user.UsersId)
             {
                 return BadRequest();
             }
 
-            db.Entry(contact).State = EntityState.Modified;
+            db.Entry(user).State = EntityState.Modified;
 
             try
             {
@@ -78,7 +109,7 @@ namespace AddressBookService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await ContactExistsAsync(id))
+                if (!await UserExistsAsync(id))
                 {
                     return NotFound();
                 }
@@ -95,16 +126,33 @@ namespace AddressBookService.Controllers
         [ResponseType(typeof(Contact))]
         public async Task<IHttpActionResult> Delete(int id)
         {
-            Contact contact = await db.Contacts.FindAsync(id);
-            if (contact == null)
+            User selectedUser = await db.Users.FindAsync(id);
+            if (selectedUser == null)
             {
                 return NotFound();
             }
 
-            db.Contacts.Remove(contact);
-            await db.SaveChangesAsync();
+            try
+            {
+                // remove referencing data from dbo.UserContacts
+                var userContacts = db.UserContacts.Where(x => x.UsersId == id);
+                foreach (var userContact in userContacts)
+                {
+                    db.UserContacts.Remove(userContact);
+                }
 
-            return Ok(contact);
+                // remove from dbo.Users
+                db.Users.Remove(selectedUser);
+                await db.SaveChangesAsync();
+
+                // return on success
+                return Ok(selectedUser);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
         /// <summary>
@@ -112,14 +160,9 @@ namespace AddressBookService.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private async Task<bool> ContactExistsAsync(int id)
+        private async Task<bool> UserExistsAsync(int id)
         {
-            var exists = await db.Contacts.CountAsync(e => e.ContactId == id) > 0;
-            if (exists)
-            {
-                return true;
-            }
-            return false;
+            return await db.Users.CountAsync(e => e.UsersId == id) > 0;
         }
     }
 }

@@ -25,10 +25,13 @@ namespace AddressBookService.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<AddressType> AddressTypes { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<EmailType> EmailTypes { get; set; }
+        public virtual DbSet<UserContact> UserContacts { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="AddressBookModelStoreContainer" CdmEntityContainer="AddressBookEntities">
+  <EntityContainerMapping StorageEntityContainer="AddressBookModelStoreContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="C__MigrationHistory">
+      <EntityTypeMapping TypeName="AddressBookModel.C__MigrationHistory">
+        <MappingFragment StoreEntitySet="__MigrationHistory">
+          <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+          <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Addresses">
       <EntityTypeMapping TypeName="AddressBookModel.Address">
         <MappingFragment StoreEntitySet="Address">
@@ -13,6 +23,7 @@
           <ScalarProperty Name="AddressState" ColumnName="AddressState" />
           <ScalarProperty Name="AddressZip" ColumnName="AddressZip" />
           <ScalarProperty Name="AddressCountry" ColumnName="AddressCountry" />
+          <ScalarProperty Name="AddressModified" ColumnName="AddressModified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -22,6 +33,7 @@
           <ScalarProperty Name="AddressTypeId" ColumnName="AddressTypeId" />
           <ScalarProperty Name="AddressTypeCode" ColumnName="AddressTypeCode" />
           <ScalarProperty Name="AddressTypeDescription" ColumnName="AddressTypeDescription" />
+          <ScalarProperty Name="AddressTypeModified" ColumnName="AddressTypeModified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -33,17 +45,9 @@
           <ScalarProperty Name="ContactMiddleName" ColumnName="ContactMiddleName" />
           <ScalarProperty Name="ContactLastName" ColumnName="ContactLastName" />
           <ScalarProperty Name="ContactNickname" ColumnName="ContactNickname" />
-          <ScalarProperty Name="ContactModified" ColumnName="ContactModified" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Contacts1">
-      <EntityTypeMapping TypeName="AddressBookModel.Contact1">
-        <MappingFragment StoreEntitySet="Contacts">
-          <ScalarProperty Name="ContactId" ColumnName="ContactId" />
-          <ScalarProperty Name="ContactFirstName" ColumnName="ContactFirstName" />
-          <ScalarProperty Name="ContactMiddleName" ColumnName="ContactMiddleName" />
-          <ScalarProperty Name="ContactLastName" ColumnName="ContactLastName" />
+          <ScalarProperty Name="ContactCompany" ColumnName="ContactCompany" />
+          <ScalarProperty Name="ContactTitle" ColumnName="ContactTitle" />
+          <ScalarProperty Name="ContactNotes" ColumnName="ContactNotes" />
           <ScalarProperty Name="ContactModified" ColumnName="ContactModified" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -59,16 +63,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Emails1">
-      <EntityTypeMapping TypeName="AddressBookModel.Email1">
-        <MappingFragment StoreEntitySet="Emails">
-          <ScalarProperty Name="EmailId" ColumnName="EmailId" />
-          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
-          <ScalarProperty Name="EmailType" ColumnName="EmailType" />
-          <ScalarProperty Name="EmailModified" ColumnName="EmailModified" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="EmailTypes">
       <EntityTypeMapping TypeName="AddressBookModel.EmailType">
         <MappingFragment StoreEntitySet="EmailType">
@@ -76,6 +70,30 @@
           <ScalarProperty Name="EmailTypeCode" ColumnName="EmailTypeCode" />
           <ScalarProperty Name="EmailTypeDescription" ColumnName="EmailTypeDescription" />
           <ScalarProperty Name="EmailTypeModified" ColumnName="EmailTypeModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserContacts">
+      <EntityTypeMapping TypeName="AddressBookModel.UserContact">
+        <MappingFragment StoreEntitySet="UserContact">
+          <ScalarProperty Name="UserContactId" ColumnName="UserContactId" />
+          <ScalarProperty Name="UsersId" ColumnName="UsersId" />
+          <ScalarProperty Name="ContactId" ColumnName="ContactId" />
+          <ScalarProperty Name="IsUser" ColumnName="IsUser" />
+          <ScalarProperty Name="UserContactModified" ColumnName="UserContactModified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="AddressBookModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="UsersId" ColumnName="UsersId" />
+          <ScalarProperty Name="UsersFirstName" ColumnName="UsersFirstName" />
+          <ScalarProperty Name="UsersMiddleName" ColumnName="UsersMiddleName" />
+          <ScalarProperty Name="UsersLastName" ColumnName="UsersLastName" />
+          <ScalarProperty Name="UsersEmail" ColumnName="UsersEmail" />
+          <ScalarProperty Name="UsersPassword" ColumnName="UsersPassword" />
+          <ScalarProperty Name="UsersModified" ColumnName="UsersModified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -21,5 +21,6 @@ namespace AddressBookService.Models
         public System.DateTime EmailModified { get; set; }
     
         public virtual Contact Contact { get; set; }
+        public virtual EmailType EmailType { get; set; }
     }
 }

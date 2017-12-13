@@ -109,10 +109,33 @@ namespace AddressBookService.Controllers
                 return NotFound();
             }
 
-            db.Contacts.Remove(contact);
-            await db.SaveChangesAsync();
+            try {
+                // remove from referencing dbo.UserContact table
+                var userContacts = db.UserContacts.Where(x => x.ContactId == id).AsEnumerable();
+                foreach (var userContact in userContacts)
+                {
+                    db.UserContacts.Remove(userContact);
+                }
+                
+                // remove from referencing dbo.Email table
+                var emails = db.Emails.Where(x => x.ContactId == id).AsEnumerable();
+                foreach (var email in emails)
+                {
+                    db.Emails.Remove(email);
+                }
 
-            return Ok(contact);
+                // remove from dbo.Contact table
+                db.Contacts.Remove(contact);
+                await db.SaveChangesAsync();
+
+                // return on success
+                return Ok(contact);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
         /// <summary>
@@ -122,12 +145,7 @@ namespace AddressBookService.Controllers
         /// <returns></returns>
         private async Task<bool> ContactExistsAsync(int id)
         {
-            var exists = await db.Contacts.CountAsync(e => e.ContactId == id) > 0;
-            if (exists)
-            {
-                return true;
-            }
-            return false;
+            return await db.Contacts.CountAsync(e => e.ContactId == id) > 0;
         }
     }
 }

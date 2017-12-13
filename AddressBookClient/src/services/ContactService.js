@@ -25,10 +25,6 @@ export function saveContact(contact){
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({
-			ContactFirstName: contact.ContactFirstName,
-			ContactMiddleName: contact.ContactMiddleName,
-			ContactLastName: contact.ContactLastName
-		})
+		body: JSON.stringify(contact)
 	});
 }

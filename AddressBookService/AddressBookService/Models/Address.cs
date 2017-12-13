@@ -23,6 +23,7 @@ namespace AddressBookService.Models
         public string AddressState { get; set; }
         public int AddressZip { get; set; }
         public string AddressCountry { get; set; }
+        public System.DateTime AddressModified { get; set; }
     
         public virtual AddressType AddressType { get; set; }
         public virtual Contact Contact { get; set; }

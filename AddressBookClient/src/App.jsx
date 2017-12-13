@@ -8,30 +8,32 @@ import Login from './components/screens/Login/Login.jsx';
 import Registration from './components/screens/Registration/Registration.jsx';
 import NoMatch from './components/screens/NoMatch/NoMatch.jsx';
 import AuthUtil from './utilities/AuthUtil';
-import logo from './assets/logo.png';
+import logo from './assets/logo96.png';
 import './styles/base/_base.scss';
 
 class App extends Component {
-  render() {
-    return (
-      <Provider store={store}> 
-        <div className="app">
-          { !AuthUtil.isUserAuthenticated() ? (
-          <div className="app-container">
-              <img src={logo} alt="logo"/>
-          </div>
-          ) : null }
-          <Switch>
-            <Route exact path="/" component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/registration" component={Registration}/>
-            <PrivateRoute path="/home" component={Home}/>
-            <Route component={NoMatch}/>
-          </Switch>
-        </div>
-      </Provider>
-    );
-  }
+	render() {
+		return (
+			<Provider store={store}> 
+				<div className="app">
+					{ !AuthUtil.isUserAuthenticated() ? (
+					<div className="app-container">
+						<div>
+							<img src={logo} alt="logo"/>
+						</div>
+					</div>
+					) : null }
+					<Switch>
+						<Route exact path="/" component={Login} />
+						<Route path="/login" component={Login} />
+						<Route path="/registration" component={Registration}/>
+						<PrivateRoute path="/home" component={Home}/>
+						<Route component={NoMatch}/>
+					</Switch>
+				</div>
+			</Provider>
+		);
+	}
 }
 
 export default App;

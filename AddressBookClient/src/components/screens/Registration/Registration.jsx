@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Auth from '../../../utilities/AuthUtil';
 import './_registration.scss';
+import { saveUser } from '../../../services/UserService';
 
 class Registration extends Component {
 	constructor(props) {
@@ -13,8 +14,10 @@ class Registration extends Component {
 		this.state = {
 			errors: {},
 			user: {
-				email: '',
-				password: ''
+				UsersFirstName: '',
+				UsersLastName: '',
+				UsersEmail: '',
+				UsersPassword: ''
 			}
 		};
 
@@ -36,13 +39,14 @@ class Registration extends Component {
 		event.preventDefault();
 		
 		// create a string for an HTTP body message
-		const email = encodeURIComponent(this.state.email);
-		const password = encodeURIComponent(this.state.password);
+		const email = encodeURIComponent(this.state.user.UsersEmail);
+		const password = encodeURIComponent(this.state.user.UsersPassword);
 		const formData = `email=${email}&password=${password}`;
 
 		// TODO: Update this to make a call to the server api and save the JWT token from that call
-		// Save fake token for now...
-		Auth.authenticateUser(formData);
+		saveUser(this.state.user).then(data => {
+			Auth.authenticateUser(formData);
+		});
 
 		// Redirect to Home page
 		this.props.history.push("/home");
@@ -58,21 +62,31 @@ class Registration extends Component {
 
 				<div className="field-line">
 					<TextField
-						floatingLabelText="Name"
-						name="name"
+						floatingLabelText="First Name (optional)"
+						name="UsersFirstName"
 						errorText={errors.name}
 						onChange={this.onChange}
-						value={user.name}
+						value={user.UsersLastName}
+					/>
+				</div>
+
+				<div className="field-line">
+					<TextField
+						floatingLabelText="Last Name (optional)"
+						name="UsersLastName"
+						onChange={this.onChange}
+						value={user.UsersLastName}
 					/>
 				</div>
 
 				<div className="field-line">
 					<TextField
 						floatingLabelText="Email"
-						name="email"
+						type="email"
+						name="UsersEmail"
 						errorText={errors.email}
 						onChange={this.onChange}
-						value={user.email}
+						value={user.UsersEmail}
 					/>
 				</div>
 
@@ -80,10 +94,10 @@ class Registration extends Component {
 					<TextField
 						floatingLabelText="Password"
 						type="password"
-						name="password"
+						name="UsersPassword"
 						onChange={this.onChange}
 						errorText={errors.password}
-						value={user.password}
+						value={user.UsersPassword}
 					/>
 				</div>
 

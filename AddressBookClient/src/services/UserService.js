@@ -1,31 +1,17 @@
-const userEndpoint = 'http://dev.addressbookservice.com/api/users';
+const userEndpoint = 'http://dev.addressbookservice.com/api/user';
 
-export function saveUser(contact){
-	fetch(userEndpoint, {
+export function saveUser(user){
+	return fetch(userEndpoint, {
 		method: 'POST',
 		headers: {
 		  'Accept': 'application/json',
 		  'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({
-		  ContactFirstName: contact.ContactFirstName,
-		  ContactMiddleName: contact.ContactMiddleName,
-		  ContactLastName: contact.ContactLastName
-		})
-	}).then();
+		body: JSON.stringify(user)
+	});
 }
 
-export function getUser(contact){
-	fetch(userEndpoint, {
-		method: 'POST',
-		headers: {
-		  'Accept': 'application/json',
-		  'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-		  ContactFirstName: contact.ContactFirstName,
-		  ContactMiddleName: contact.ContactMiddleName,
-		  ContactLastName: contact.ContactLastName
-		})
-	}).then();
+export function getUser(user){
+	var endpoint = userEndpoint + '?email=' + user.UsersEmail + '&password=' + user.UsersPassword;
+	return fetch(endpoint);
 }

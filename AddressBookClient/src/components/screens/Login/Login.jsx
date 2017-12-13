@@ -4,6 +4,7 @@ import { CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Auth from '../../../utilities/AuthUtil';
+import { getUser } from '../../../services/UserService';
 import './_login.scss';
 
 class Login extends Component {
@@ -13,8 +14,8 @@ class Login extends Component {
 		this.state = {
 			errors: {},
 			user: {
-				email: '',
-				password: ''
+				UsersEmail: '',
+				UsersPassword: ''
 			},
 			redirectToReferrer: Auth.isUserAuthenticated()
 		};
@@ -36,17 +37,30 @@ class Login extends Component {
 	onSubmit(event) {
 		event.preventDefault();
 		
-		// create a string for an HTTP body message
-		const email = encodeURIComponent(this.state.user.email);
-		const password = encodeURIComponent(this.state.user.password);
-		const formData = `email=${email}&password=${password}`;
+		// TODO: Update this to save the JWT token
+		getUser(this.state.user).then(data => {
+			if (data.ok){
+				Auth.authenticateUser();
 
-		// TODO: Update this to make a call to the server api and save the JWT token from that call
-		// Save fake token for now...
-		Auth.authenticateUser(formData);
-
-		// Redirect to Home page
-		this.props.history.push("/home");
+				// Redirect to Home page
+				this.props.history.push("/home");
+			}
+			else {
+				Auth.deauthenticateUser();
+				this.setState({
+					errors : {
+						summary: 'Login failed. Please enter a valid email and password.'
+					}
+				});
+			}
+		}).catch(() => {
+			Auth.deauthenticateUser();
+			this.setState({
+				errors : {
+					summary: 'Login failed. This may be due to a bad internet connection. Please try again.'
+				}
+			});
+		})
 	}
 
 	render() {
@@ -64,10 +78,10 @@ class Login extends Component {
 				<div className="field-line">
 					<TextField
 						floatingLabelText="Email"
-						name="email"
+						name="UsersEmail"
 						errorText={errors.email}
 						onChange={this.onChange}
-						value={user.email}
+						value={user.UsersEmail}
 					/>
 				</div>
 	
@@ -75,10 +89,10 @@ class Login extends Component {
 					<TextField
 						floatingLabelText="Password"
 						type="password"
-						name="password"
+						name="UsersPassword"
 						onChange={this.onChange}
 						errorText={errors.password}
-						value={user.password}
+						value={user.UsersPassword}
 					/>
 				</div>
 	

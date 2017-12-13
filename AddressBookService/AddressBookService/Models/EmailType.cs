@@ -14,9 +14,18 @@ namespace AddressBookService.Models
     
     public partial class EmailType
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public EmailType()
+        {
+            this.Emails = new HashSet<Email>();
+        }
+    
         public int EmailTypeId { get; set; }
         public string EmailTypeCode { get; set; }
         public string EmailTypeDescription { get; set; }
         public System.DateTime EmailTypeModified { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Email> Emails { get; set; }
     }
 }

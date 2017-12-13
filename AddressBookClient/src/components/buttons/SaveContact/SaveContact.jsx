@@ -1,13 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { saveContact } from '../../../services/ContactService';
+import { setEditMode } from '../../../utilities/Actions';
 import FlatButton from 'material-ui/FlatButton';
 
 class SaveContact extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			contact: []
+			contact: this.props.contact
 		};
 		
 		this.handleSave = this.handleSave.bind(this);
@@ -18,20 +19,8 @@ class SaveContact extends Component {
 	}
 
 	handleSave(){
-		var endpoint = 'http://dev.addressbookservice.com/api/contacts/';
-		return fetch(endpoint, {
-			method: 'POST',
-			headers: {
-			  'Accept': 'application/json',
-			  'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-			  ContactFirstName: this.state.contact.ContactFirstName,
-			  ContactMiddleName: this.state.contact.ContactMiddleName,
-			  ContactLastName: this.state.contact.ContactLastName
-			}).then(() => {
-				this.props.setEditMode(false);
-			})
+		saveContact(this.state.contact).then(() =>{
+			this.props.setEditMode(false);
 		});
 	}
 	

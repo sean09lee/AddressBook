@@ -66,12 +66,17 @@ class EditContactCard extends Component {
 		return (
 		<Card className="editContactCard">
 			<CardHeader avatar={DefaultAvatar}>
-				<TextField floatingLabelText="First Name" underlineShow={false} ref={(input) => this.input = input}
-					name="ContactFirstName" value={this.state.contact.ContactFirstName} onChange={this.handleInputChange}/>
+				<TextField 
+					floatingLabelText="First Name" 
+					underlineShow={false} 
+					ref={(input) => this.input = input}
+					name="ContactFirstName" 
+					value={this.state.contact.ContactFirstName} 
+					onChange={this.handleInputChange}/>
 				<TextField floatingLabelText="Middle Name" underlineShow={false}
-					name="middleName" value={this.state.contact.ContactMiddleName} onChange={this.handleInputChange}/>
+					name="ContactMiddleName" value={this.state.contact.ContactMiddleName} onChange={this.handleInputChange}/>
 				<TextField floatingLabelText="Last Name" underlineShow={false} 
-					name="lastName" value={this.state.contact.ContactLastName} onChange={this.handleInputChange}/>
+					name="ContactLastName" value={this.state.contact.ContactLastName} onChange={this.handleInputChange}/>
 			</CardHeader>
 			<Divider />
 			<CardTitle>

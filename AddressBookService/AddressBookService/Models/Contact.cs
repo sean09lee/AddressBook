@@ -19,6 +19,7 @@ namespace AddressBookService.Models
         {
             this.Addresses = new HashSet<Address>();
             this.Emails = new HashSet<Email>();
+            this.UserContacts = new HashSet<UserContact>();
         }
     
         public int ContactId { get; set; }
@@ -35,5 +36,7 @@ namespace AddressBookService.Models
         public virtual ICollection<Address> Addresses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Email> Emails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserContact> UserContacts { get; set; }
     }
 }

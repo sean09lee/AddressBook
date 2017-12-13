@@ -1,35 +1,35 @@
 .app {
-  background-color: #ededed;
+	background-color: #ededed;
 }
 
 .container-column {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .flex-container {
-  display: flex;
-  
-  .flex-item {
-    flex: 1;
-  }
+	display: flex;
+	
+	.flex-item {
+		flex: 1;
+	}
 }
 
 .app-container {
-  display: flex;
-  height: 300px;
+	display: flex;
+	justify-content: center;
+	height: 300px;
 
-  img {
-    flex: 1;
-    padding: 50px;
-  }
+	img {
+		height: 300px;
+	}
 }
 
 button {
-  background-color: blue;
+	background-color: blue;
 }
 
 a {
-  font-weight: bold;
-  text-decoration: none;
+	font-weight: bold;
+	text-decoration: none;
 }
