@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { dispatch, connect } from 'react-redux';
-import { itemsFetchData } from '../../../utilities/Actions'
+import { itemsFetchData } from '../../../utilities/Actions';
 import TearSheet from '../TearSheet/TearSheet.jsx';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
@@ -16,7 +16,7 @@ class ContactList extends Component {
 		super(props)
 		this.state = {
 			requestFailed: false,
-			contacts: []
+			contactMarkup: []
 		}
 	}
 
@@ -37,7 +37,7 @@ class ContactList extends Component {
 					/>
 				)
 			})
-			this.setState({ contacts : contactList });
+			this.setState({ contactMarkup : contactList });
 		});
 	};
 
@@ -52,10 +52,13 @@ class ContactList extends Component {
 						maxWidth: 800
 					}}
 					/>
-				<RaisedButton label="Add" primary={true} />
+				<div className="flex-container">
+					<RaisedButton label="Add" primary={true} />
+					<RaisedButton label="Delete" primary={true} />
+				</div>
 				<List>
 					<Subheader>Contacts</Subheader>
-					{this.state.contacts}
+					{this.state.contactMarkup}
 				</List>
 				<Divider />
 				<List>

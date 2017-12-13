@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
 
 export default combineReducers({
-    items,
-    itemsHasErrored,
-    itemsIsLoading
+	selectedContact,
+	itemsHasErrored,
+	itemsIsLoading,
+	isEditMode
 });
 
 export function itemsHasErrored(state = false, action) {
@@ -24,10 +25,19 @@ export function itemsIsLoading(state = false, action) {
 	}
 }
 
-export function items(state = [], action) {
+export function selectedContact(state = [], action) {
 	switch (action.type) {
 			case 'ITEMS_FETCH_DATA_SUCCESS':
 					return action.contact;
+			default:
+					return state;
+	}
+}
+
+export function isEditMode(state = false, action) {
+	switch (action.type) {
+			case 'IS_EDIT_MODE':
+					return action.editMode;
 			default:
 					return state;
 	}

@@ -25,3 +25,16 @@ export function itemsFetchData(contact) {
         dispatch(itemsFetchDataSuccess(contact));
     };
 }
+
+export function editMode(bool){
+    return {
+        type: 'IS_EDIT_MODE',
+        editMode: bool
+    }
+}
+
+export function setEditMode(bool){
+    return (dispatch) => {
+        dispatch(editMode(bool));
+    };
+}

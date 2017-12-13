@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './_loginButton.scss';
 
 class LoginButton extends Component {
   render() {

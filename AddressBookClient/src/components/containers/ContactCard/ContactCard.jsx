@@ -1,50 +1,48 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import Toggle from 'material-ui/Toggle';
 import DefaultAvatar from '../../../assets/default_avatar.jpg';
+import EditContactCard from '../../containers/EditContactCard/EditContactCard.jsx';
+import DeleteContact from '../../buttons/DeleteContact/DeleteContact.jsx';
+import EditContact from '../../buttons/EditContact/EditContact.jsx';
+import SaveContact from '../../buttons/SaveContact/SaveContact.jsx';
+import './_contactCard.scss';
 
 class ContactCard extends Component {
   constructor(props) {
     super(props);
     var newContact = {
       ContactFirstName: 'test',
-      ContactLastName: 'last'
+      ContactLastName: 'last',
+      ContactNotes: ''
     };
     this.state = {
-      expanded: false,
-      contact: newContact
+      contact: newContact,
+      editMode: false
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      contact: nextProps
+      contact: nextProps.contact,
+      editMode: nextProps.editMode
     });
   }
 
-  handleExpandChange = (expanded) => {
-    this.setState({expanded: expanded});
-  };
-
-  handleToggle = (event, toggle) => {
-    this.setState({expanded: toggle});
-  };
-
-  handleExpand = () => {
-    this.setState({expanded: true});
-  };
-
-  handleReduce = () => {
-    this.setState({expanded: false});
-  };
-
   render() {
+    if (this.state.editMode){
+      return (
+        <EditContactCard />
+      )
+    }
+
+    //else
     return (
       <Card>
         <CardHeader
-          title={this.state.contact.ContactFirstName}
+          title={this.state.contact.ContactFirstName + this.state.contact.ContactLastName}
           subtitle="Subtitle"
           avatar={DefaultAvatar}
           actAsExpander={false}
@@ -57,13 +55,21 @@ class ContactCard extends Component {
           Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
           Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
         </CardText>
+        <CardActions className="flex-container">
+          <DeleteContact contact={this.state.contact} />
+          <EditContact contact={this.state.contact}/>
+          <SaveContact contact={this.state.contact} />
+        </CardActions>
       </Card>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => { 
-  return state.items;
+const mapStateToProps = (state) => { 
+  return {
+    contact: state.selectedContact,
+    editMode: state.isEditMode
+  };
 }
 
 export default connect(mapStateToProps)(ContactCard);

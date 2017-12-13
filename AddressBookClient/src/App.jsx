@@ -17,7 +17,7 @@ class App extends Component {
       <Provider store={store}> 
         <div className="app">
           { !AuthUtil.isUserAuthenticated() ? (
-          <div className="flex-container">
+          <div className="app-container">
               <img src={logo} alt="logo"/>
           </div>
           ) : null }

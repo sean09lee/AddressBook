@@ -1,5 +1,4 @@
 ﻿using AddressBookService.Models;
-using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -12,11 +11,11 @@ using System.Web.Http.Description;
 namespace AddressBookService.Controllers
 {
     [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
-    public class ContactsController : ApiController
+    public class UserController : ApiController
     {
         private AddressBookEntities db = new AddressBookEntities();
 
-        // GET api/contacts
+        // GET api/user
         public async Task<IHttpActionResult> Get()
         {
             var contactList = await db.Contacts.ToListAsync();
@@ -29,7 +28,7 @@ namespace AddressBookService.Controllers
             return Ok(contacts);
         }
 
-        // GET api/contacts/5
+        // GET api/user/5
         [ResponseType(typeof(Contact))]
         public async Task<IHttpActionResult> Get(int id)
         {
@@ -42,7 +41,7 @@ namespace AddressBookService.Controllers
             return Ok(contact);
         }
 
-        // POST api/contacts
+        // POST api/user
         [ResponseType(typeof(Contact))]
         public async Task<IHttpActionResult> Post(Contact contact)
         {
@@ -52,18 +51,12 @@ namespace AddressBookService.Controllers
             }
 
             db.Contacts.Add(contact);
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+            await db.SaveChangesAsync();
+
             return CreatedAtRoute("DefaultApi", new { id = contact.ContactId }, contact);
         }
 
-        // PUT api/contacts/5
+        // PUT api/user/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> Put(int id, Contact contact)
         {
@@ -98,7 +91,7 @@ namespace AddressBookService.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // DELETE api/contacts/5
+        // DELETE api/user/5
         [ResponseType(typeof(Contact))]
         public async Task<IHttpActionResult> Delete(int id)
         {
