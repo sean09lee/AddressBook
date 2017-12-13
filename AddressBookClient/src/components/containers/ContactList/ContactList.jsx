@@ -13,6 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import DefaultAvatar from '../../../assets/default_avatar.jpg';
 import SearchBar from '../SearchBar/SearchBar.jsx';
 import TearSheet from '../TearSheet/TearSheet.jsx';
+import AddContact from '../../buttons/AddContact/AddContact.jsx';
 import RefreshButton from '../../buttons/RefreshButton/RefreshButton.jsx';
 
 class ContactList extends Component {
@@ -85,9 +86,8 @@ class ContactList extends Component {
 					}}
 					/>
 				<div className="flex-container">
-					<RaisedButton label="Add" primary={true} className="flex-item"/>
-					<RaisedButton label="Delete All" primary={true} className="flex-item"/>
-					<RefreshButton />
+					<AddContact className="flex-item" />
+					<RefreshButton className="flex-item" />
 				</div>
 				<List>
 					<Subheader>Contacts</Subheader>

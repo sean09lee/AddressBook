@@ -51,6 +51,7 @@ namespace AddressBookService.Controllers
                 return BadRequest(ModelState);
             }
 
+            contact.ContactModified = DateTime.Now;
             db.Contacts.Add(contact);
             try
             {

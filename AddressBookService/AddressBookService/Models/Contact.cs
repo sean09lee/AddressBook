@@ -26,6 +26,9 @@ namespace AddressBookService.Models
         public string ContactMiddleName { get; set; }
         public string ContactLastName { get; set; }
         public string ContactNickname { get; set; }
+        public string ContactCompany { get; set; }
+        public string ContactTitle { get; set; }
+        public string ContactNotes { get; set; }
         public System.DateTime ContactModified { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

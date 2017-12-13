@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { dispatch, connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
-import { setContact, setContacts, setEditMode } from '../../../utilities/Actions';
+import { setContacts, setFilteredContacts } from '../../../utilities/Actions';
 import { getContacts } from '../../../services/ContactService';
 
 class RefreshButton extends Component {
@@ -25,7 +25,7 @@ class RefreshButton extends Component {
 
 	render() {
 		return (
-			<RaisedButton label="Refresh" primary={true} className="flex-item" onClick={this.handleRefresh}/>
+			<RaisedButton label="Refresh" primary={true} className="flex-item"  onClick={this.handleRefresh}/>
 		)
 	}
 }
