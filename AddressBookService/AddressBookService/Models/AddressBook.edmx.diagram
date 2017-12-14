@@ -4,20 +4,19 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a18a400edb7d48dcaf8dbdd143c06d73" Name="Diagram1">
+      <Diagram DiagramId="9c927bcdacfa4ff9a04d17c02be224fc" Name="Diagram1">
         <EntityTypeShape EntityType="AddressBookModel.C__MigrationHistory" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AddressBookModel.Address" Width="1.5" PointX="2.375" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="AddressBookModel.AddressType" Width="1.5" PointX="0.75" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="AddressBookModel.Contact" Width="1.5" PointX="5.625" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="AddressBookModel.Email" Width="1.5" PointX="8.875" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="AddressBookModel.EmailType" Width="1.5" PointX="3.75" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="AddressBookModel.UserContact" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="AddressBookModel.User" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AddressBookModel.Address" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="AddressBookModel.AddressType" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="AddressBookModel.Contact" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="AddressBookModel.Email" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="AddressBookModel.EmailType" Width="1.5" PointX="8.5" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AddressBookModel.UserContact" Width="1.5" PointX="6" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AddressBookModel.User" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="AddressBookModel.FK_AddressType_Address" ManuallyRouted="false" />
         <AssociationConnector Association="AddressBookModel.FK_Contact_Address" ManuallyRouted="false" />
         <AssociationConnector Association="AddressBookModel.FK_Contact_Email" ManuallyRouted="false" />
         <AssociationConnector Association="AddressBookModel.FK_UserContact_Contact" ManuallyRouted="false" />
-        <AssociationConnector Association="AddressBookModel.FK_Email_EmailType" ManuallyRouted="false" />
         <AssociationConnector Association="AddressBookModel.FK_UserContact_Users" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

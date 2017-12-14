@@ -14,7 +14,7 @@ namespace AddressBookService.Controllers
     [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class ContactsController : ApiController
     {
-        private AddressBookEntities db = new AddressBookEntities();
+        private Entities db = new Entities();
 
         // GET api/contacts
         public async Task<IHttpActionResult> Get()
@@ -77,24 +77,24 @@ namespace AddressBookService.Controllers
                     }
 
                     // Update dbo.AddressType
-                    address.AddressType.AddressTypeModified = DateTime.Now;
-                    var existingAddressType = await db.AddressTypes.Where(x => x.AddressTypeId == address.AddressTypeId).FirstOrDefaultAsync();
-                    if (existingAddressType == null)
-                    {
-                        // add new if does not exist
-                        db.AddressTypes.Add(address.AddressType);
-                    }
-                    else
-                    {
-                        // update if exists
-                        existingAddressType = address.AddressType;
-                        var local = db.Set<AddressType>().Local.FirstOrDefault(f => f.AddressTypeId == existingAddressType.AddressTypeId);
-                        if (local != null)
-                        {
-                            db.Entry(local).State = EntityState.Detached;
-                        }
-                        db.Entry(existingAddressType).State = EntityState.Modified;
-                    }
+                    //address.AddressType.AddressTypeModified = DateTime.Now;
+                    //var existingAddressType = await db.AddressTypes.Where(x => x.AddressTypeId == address.AddressTypeId).FirstOrDefaultAsync();
+                    //if (existingAddressType == null)
+                    //{
+                    //    // add new if does not exist
+                    //    db.AddressTypes.Add(address.AddressType);
+                    //}
+                    //else
+                    //{
+                    //    // update if exists
+                    //    existingAddressType = address.AddressType;
+                    //    var local = db.Set<AddressType>().Local.FirstOrDefault(f => f.AddressTypeId == existingAddressType.AddressTypeId);
+                    //    if (local != null)
+                    //    {
+                    //        db.Entry(local).State = EntityState.Detached;
+                    //    }
+                    //    db.Entry(existingAddressType).State = EntityState.Modified;
+                    //}
                 }
                 
                 foreach(var email in contact.Emails)

@@ -17,7 +17,7 @@ namespace AddressBookService.Models
         public int UserContactId { get; set; }
         public int UsersId { get; set; }
         public int ContactId { get; set; }
-        public byte IsUser { get; set; }
+        public int IsUser { get; set; }
         public System.DateTime UserContactModified { get; set; }
     
         public virtual Contact Contact { get; set; }

@@ -24,3 +24,12 @@ insert into UserContact(UsersId, ContactId, UserContactModified)
 select 1 UsersId, ContactId, GetDate() UserContactModified
 from Contact;
 select * from UserContact
+
+--Insert into dbo.AddressType
+insert into AddressType(AddressTypeCode, AddressTypeDescription, AddressTypeModified)
+values ('Primary', 'Primary address', GetDate())
+insert into AddressType(AddressTypeCode, AddressTypeDescription, AddressTypeModified)
+values ('School', 'School address', GetDate())
+insert into AddressType(AddressTypeCode, AddressTypeDescription, AddressTypeModified)
+values ('Work', 'Work address', GetDate())
+

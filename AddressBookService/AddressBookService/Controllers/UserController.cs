@@ -14,19 +14,28 @@ namespace AddressBookService.Controllers
     [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class UserController : ApiController
     {
-        private AddressBookEntities db = new AddressBookEntities();
+        private Entities db = new Entities();
 
         // GET api/user
         public async Task<IHttpActionResult> Get()
         {
-            var users = await db.Users.ToListAsync();
-            if (users == null)
+            try
             {
-                return NotFound();
+                var users = await db.Users.ToListAsync();
+                if (users == null)
+                {
+                    return NotFound();
+                }
+                // order by lastname, firstname, company
+                var contacts = users.OrderBy(x => x.UsersLastName).ThenBy(x => x.UsersFirstName);
+                return Ok(contacts);
             }
-            // order by lastname, firstname, company
-            var contacts = users.OrderBy(x => x.UsersLastName).ThenBy(x => x.UsersFirstName);
-            return Ok(contacts);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+
         }
 
         // GET api/user?id=5

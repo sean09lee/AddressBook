@@ -13,10 +13,10 @@ namespace AddressBookService.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class AddressBookEntities : DbContext
+    public partial class Entities : DbContext
     {
-        public AddressBookEntities()
-            : base("name=AddressBookEntities")
+        public Entities()
+            : base("name=Entities")
         {
         }
     

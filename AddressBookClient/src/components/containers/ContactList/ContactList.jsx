@@ -20,14 +20,15 @@ class ContactList extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			requestFailed: false
+			requestFailed: false,
+			deleteId: null
 		}
 
 		this.deleteContact = this.deleteContact.bind(this);
 	}
 
-	deleteContact(contact){
-		console.log('Deleting contact ' + contact.ContactFirstName + '...');
+	deleteContact(){
+		console.log('Deleting contact ' + this.state.deleteId + '...');
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -59,7 +60,10 @@ class ContactList extends Component {
 					touch={true}
 					tooltip="Delete"
 					tooltipPosition="bottom-left"
-					onClick={(contact) => this.deleteContact(contact)}
+					onClick={() => {
+						this.setState({ deleteId: contact.ContactId});
+						this.deleteContact;
+					}}
 				>
 					<Delete />
 				</IconButton>

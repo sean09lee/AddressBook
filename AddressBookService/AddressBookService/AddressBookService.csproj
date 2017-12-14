@@ -242,8 +242,8 @@
   <ItemGroup>
     <Content Include="Models\AddressBook.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AddressBook.edmx</DependentUpon>
       <LastGenOutput>AddressBook.Context.cs</LastGenOutput>
+      <DependentUpon>AddressBook.edmx</DependentUpon>
     </Content>
     <Content Include="Models\AddressBook.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

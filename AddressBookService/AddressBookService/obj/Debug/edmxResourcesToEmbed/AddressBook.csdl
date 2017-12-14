@@ -31,7 +31,7 @@
     <Key>
       <PropertyRef Name="AddressTypeId" />
     </Key>
-    <Property Name="AddressTypeId" Type="Int32" Nullable="false" />
+    <Property Name="AddressTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="AddressTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="AddressTypeDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="AddressTypeModified" Type="DateTime" Nullable="false" Precision="3" />
@@ -42,9 +42,9 @@
       <PropertyRef Name="ContactId" />
     </Key>
     <Property Name="ContactId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ContactFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContactFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="ContactMiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ContactLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContactLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="ContactNickname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="ContactCompany" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="ContactTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -64,7 +64,6 @@
     <Property Name="EmailTypeId" Type="Int32" Nullable="false" />
     <Property Name="EmailModified" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="Contact" Relationship="Self.FK_Contact_Email" FromRole="Email" ToRole="Contact" />
-    <NavigationProperty Name="EmailType" Relationship="Self.FK_Email_EmailType" FromRole="Email" ToRole="EmailType" />
   </EntityType>
   <EntityType Name="EmailType">
     <Key>
@@ -74,7 +73,6 @@
     <Property Name="EmailTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="EmailTypeDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="EmailTypeModified" Type="DateTime" Nullable="false" Precision="3" />
-    <NavigationProperty Name="Emails" Relationship="Self.FK_Email_EmailType" FromRole="EmailType" ToRole="Email" />
   </EntityType>
   <EntityType Name="UserContact">
     <Key>
@@ -83,7 +81,7 @@
     <Property Name="UserContactId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="UsersId" Type="Int32" Nullable="false" />
     <Property Name="ContactId" Type="Int32" Nullable="false" />
-    <Property Name="IsUser" Type="Byte" Nullable="false" />
+    <Property Name="IsUser" Type="Int32" Nullable="false" />
     <Property Name="UserContactModified" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="Contact" Relationship="Self.FK_UserContact_Contact" FromRole="UserContact" ToRole="Contact" />
     <NavigationProperty Name="User" Relationship="Self.FK_UserContact_Users" FromRole="UserContact" ToRole="Users" />
@@ -96,7 +94,7 @@
     <Property Name="UsersFirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="UsersMiddleName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="UsersLastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="UsersEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UsersEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="UsersPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="UsersModified" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="UserContacts" Relationship="Self.FK_UserContact_Users" FromRole="Users" ToRole="UserContact" />
@@ -149,18 +147,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Email_EmailType">
-    <End Role="EmailType" Type="Self.EmailType" Multiplicity="1" />
-    <End Role="Email" Type="Self.Email" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmailType">
-        <PropertyRef Name="EmailTypeId" />
-      </Principal>
-      <Dependent Role="Email">
-        <PropertyRef Name="EmailTypeId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_UserContact_Users">
     <End Role="Users" Type="Self.User" Multiplicity="1" />
     <End Role="UserContact" Type="Self.UserContact" Multiplicity="*" />
@@ -197,10 +183,6 @@
     <AssociationSet Name="FK_UserContact_Contact" Association="Self.FK_UserContact_Contact">
       <End Role="Contact" EntitySet="Contacts" />
       <End Role="UserContact" EntitySet="UserContacts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Email_EmailType" Association="Self.FK_Email_EmailType">
-      <End Role="EmailType" EntitySet="EmailTypes" />
-      <End Role="Email" EntitySet="Emails" />
     </AssociationSet>
     <AssociationSet Name="FK_UserContact_Users" Association="Self.FK_UserContact_Users">
       <End Role="Users" EntitySet="Users" />

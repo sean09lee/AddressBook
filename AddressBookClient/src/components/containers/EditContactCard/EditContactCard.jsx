@@ -9,6 +9,7 @@ import DefaultAvatar from '../../../assets/default_avatar.jpg';
 import DeleteContact from '../../buttons/DeleteContact/DeleteContact.jsx';
 import EditContact from '../../buttons/EditContact/EditContact.jsx';
 import SaveContact from '../../buttons/SaveContact/SaveContact.jsx';
+import DropDown from '../../buttons/Dropdown/Dropdown.jsx';
 import './_editContactCard.scss';
 
 class EditContactCard extends Component {
@@ -51,6 +52,7 @@ class EditContactCard extends Component {
 		this.handleNewEmail = this.handleNewEmail.bind(this);
 		this.handleNewAddress = this.handleNewAddress.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleAddressChange = this.handleAddressChange.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -66,6 +68,9 @@ class EditContactCard extends Component {
 			PhoneType: null
 		};
 		var contactCopy = this.state.contact;
+		if(!contactCopy.PhoneNumber){
+			contactCopy.PhoneNumber = []
+		}
 		contactCopy.PhoneNumber.push(email);
 		this.setState({
 			contact : contactCopy
@@ -80,6 +85,9 @@ class EditContactCard extends Component {
 			EmailAddress: '',
 		};
 		var contactCopy = this.state.contact;
+		if (!contactCopy.Emails){
+			contactCopy.Emails = [];
+		}
 		contactCopy.Emails.push(email);
 		this.setState({
 			contact : contactCopy
@@ -89,9 +97,9 @@ class EditContactCard extends Component {
 	handleNewAddress(){
 		console.log('adding new address');
 		var address = {
-			AddressId: null,
+			AddressId: 0,
 			ContactId: this.state.contact.ContactId,
-			AddressTypeId: null,
+			AddressTypeId: 1,
 			AddressLine1: '',
 			AddressLine2: '',
 			AddressCity: '',
@@ -100,7 +108,11 @@ class EditContactCard extends Component {
 			AddressCountry: ''
 		};
 		var contactCopy = this.state.contact;
+		if (!contactCopy.Addresses){
+			contactCopy.Addresses = [];
+		}
 		contactCopy.Addresses.push(address);
+
 		this.setState({
 			contact : contactCopy
 		});
@@ -117,6 +129,17 @@ class EditContactCard extends Component {
 		});
 	}
 
+	handleAddressChange(event){
+		var contact = this.state.contact;
+		const field	= event.target.name;
+		const index = event.target.title;
+		contact.Addresses[index][field] = event.target.value;
+
+		this.setState({
+			contact
+		})
+	}
+
 	render() {
 		let DeleteButton = null;
 		if (this.state.contact.ContactId){
@@ -124,34 +147,54 @@ class EditContactCard extends Component {
 		}
 
 		// Define addresses
-		let Addresses = null;
-		if (this.state.contact.Addresses && this.state.contact.Addresses.length > 0){
-			Addresses = this.state.contact.Addresses.map(input => 
-				<div key={input.AddressId}>
-					<TextField hintText="Address Line 1" floatingLabelText="Address Line 1" underlineShow={false} value={input.AddressLine1} onChange={this.handleInputChange}/>
-					<TextField hintText="Address Line 2" floatingLabelText="Address Line 2" underlineShow={false} value={input.AddressLine2} onChange={this.handleInputChange}/>
-					<TextField hintText="City" floatingLabelText="City" underlineShow={false} value={input.AddressCity} onChange={this.handleInputChange}/>
-					<TextField hintText="State" floatingLabelText="State" underlineShow={false} value={input.AddressState} onChange={this.handleInputChange}/>
-					<TextField hintText="Country" floatingLabelText="Country" underlineShow={false} value={input.AddressCountry} onChange={this.handleInputChange}/>
-					<TextField hintText="ZIP Code" floatingLabelText="ZIP Code" underlineShow={false} value={input.AddressZip} onChange={this.handleInputChange}/>
-				</div>
-			)
+		const Addresses = [];
+		var addresses = this.state.contact.Addresses;
+		if (addresses && addresses.length > 0){
+			for (var i = 0; i < addresses.length; i++) {
+				Addresses.push(
+					<div className="addresses" key={i}>
+						<TextField hintText="Address Line 1" floatingLabelText="Address Line 1" 
+						underlineShow={false} value={addresses[i].AddressLine1}
+						name={"AddressLine1"} onChange={this.handleAddressChange}
+						title={i}/>
+						<TextField hintText="Address Line 2" floatingLabelText="Address Line 2" 
+						underlineShow={false} value={addresses[i].AddressLine2}
+						name={"AddressLine2"} onChange={this.handleAddressChange} title={i}/>
+						<TextField hintText="City" floatingLabelText="City" underlineShow={false} 
+						name={"AddressCity"} title={i}
+						value={addresses[i].AddressCity} onChange={this.handleAddressChange}/>
+						<TextField hintText="ZIP Code" floatingLabelText="ZIP Code" underlineShow={false} 
+						name={"AddressZip"} title={i}
+						value={addresses[i].AddressZip} onChange={this.handleAddressChange}/>
+						<TextField hintText="State" floatingLabelText="State" underlineShow={false} 
+						name={"AddressState"} title={i}
+						value={addresses[i].AddressState} onChange={this.handleAddressChange}/>
+						<TextField hintText="Country" floatingLabelText="Country" underlineShow={false} 
+						name={"AddressCountry"} title={i}
+						value={addresses[i].AddressCountry} onChange={this.handleAddressChange}/>
+						<DropDown />
+					</div>
+				)
+			};
 		}
 
-		let Emails = null;
-		if (this.state.contact.Emails && this.state.contact.Emails.length > 0){
-			Emails = this.state.contact.Emails.map(input => 
-				<div className="emails">
-					<TextField type="email" hintText="Email" floatingLabelText="Email" 
-					name={"ContactEmail" + input.EmailId}
-					underlineShow={false} value={input.EmailAddress} onChange={this.handleInputChange}/>
-				</div>
-			)
+		const Emails = [];
+		var emails = this.state.contact.Emails;
+		if (emails && emails.length > 0){
+			for (var i = 0; i < emails.length; i++) {
+				Emails.push(
+					<div className="emails" key={i}>
+						<TextField type="email" hintText="Email" floatingLabelText="Email" 
+						name={"EmailAddress" + i} underlineShow={false} value={emails[i].EmailAddress}
+						onChange={this.handleInputChange}/>
+					</div>
+				)
+			}
 		}
 
 		let Phones = null;
 		if (this.state.contact.Phones && this.state.contact.Phones.length > 0){
-			Emails = this.state.contact.Phones.map(input => 
+			Phones = this.state.contact.Phones.map(input => 
 				<div className="phones">
 					<TextField hintText="Phone Number" floatingLabelText="Phone Number" 
 					underlineShow={false} value={input.PhoneNumber} onChange={this.handleInputChange}/>

@@ -79,9 +79,18 @@ class ContactCard extends Component {
 
 		}
 
-		let Addresses = null;
-		if (this.state.contact.Addresses && this.state.contact.Addresses > 0){
-
+		let Addresses = [];
+		var addresses = this.state.contact.Addresses;
+		if (addresses && addresses.length > 0){
+			for (var i=0; i < addresses.length; i++){
+				Addresses.push(
+				<div className="addresses">
+					{addresses[i].AddressLine1}{addresses[i].AddressLine2}, 
+					{addresses[i].AddressCity}, {addresses[i].AddressZip}, 
+					{addresses[i].AddressState}, {addresses[i].Country}
+				</div>
+				);
+			}
 		}
 
 		// set defaults

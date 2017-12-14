@@ -18,6 +18,9 @@ GO
 ALTER TABLE [dbo].[Email] DROP CONSTRAINT [FK_Contact_Email]
 GO
 
+ALTER TABLE [dbo].[Email] DROP CONSTRAINT [FK_EmailType_Email]
+GO
+
 /****** Object:  Table [dbo].[Email]    Script Date: 12/13/2017 3:21:14 AM ******/
 DROP TABLE [dbo].[Email]
 GO
@@ -63,7 +66,7 @@ CREATE TABLE [dbo].[Contact](
 	[ContactCompany] [varchar](50) NULL,
 	[ContactTitle] [varchar](50) NULL,
 	[ContactNotes] [varchar](max) NULL,
-	[ContactModified] [datetime] NOT NULL,
+	[ContactModified] [datetime] NOT NULL DEFAULT GETDATE(),
  CONSTRAINT [PK_Contact] PRIMARY KEY CLUSTERED 
 (
 	[ContactId] ASC
@@ -82,9 +85,10 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[AddressType](
-	[AddressTypeId] [int] NOT NULL,
+	[AddressTypeId] [int] IDENTITY(1,1) NOT NULL,
 	[AddressTypeCode] [varchar](50) NOT NULL,
 	[AddressTypeDescription] [varchar](50) NULL,
+	[AddressTypeModified] [datetime] NOT NULL DEFAULT GETDATE(),
  CONSTRAINT [PK_AddressType] PRIMARY KEY CLUSTERED 
 (
 	[AddressTypeId] ASC
@@ -112,7 +116,7 @@ CREATE TABLE [dbo].[Address](
 	[AddressState] [varchar](50) NOT NULL,
 	[AddressZip] [int] NOT NULL,
 	[AddressCountry] [varchar](50) NOT NULL,
-	[AddressModified] [datetime] NOT NULL
+	[AddressModified] [datetime] NOT NULL DEFAULT GETDATE()
  CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED 
 (
 	[AddressId] ASC
@@ -149,7 +153,7 @@ CREATE TABLE [dbo].[EmailType](
 	[EmailTypeId] [int] IDENTITY(1,1) NOT NULL,
 	[EmailTypeCode] [varchar](50) NOT NULL,
 	[EmailTypeDescription] [varchar](max) NULL,
-	[EmailTypeModified] [datetime] NOT NULL,
+	[EmailTypeModified] [datetime] NOT NULL DEFAULT GETDATE(),
  CONSTRAINT [PK_EmailType] PRIMARY KEY CLUSTERED 
 (
 	[EmailTypeId] ASC
@@ -173,7 +177,7 @@ CREATE TABLE [dbo].[Email](
 	[ContactId] [int] NOT NULL,
 	[EmailAddress] [varchar](max) NOT NULL,
 	[EmailTypeId] [int] NOT NULL,
-	[EmailModified] [datetime] NOT NULL,
+	[EmailModified] [datetime] NOT NULL DEFAULT GETDATE(),
  CONSTRAINT [PK_Email] PRIMARY KEY CLUSTERED 
 (
 	[EmailId] ASC
@@ -186,6 +190,13 @@ REFERENCES [dbo].[Contact] ([ContactId])
 GO
 
 ALTER TABLE [dbo].[Email] CHECK CONSTRAINT [FK_Contact_Email]
+GO
+
+ALTER TABLE [dbo].[Email]  WITH CHECK ADD  CONSTRAINT [FK_EmailType_Email] FOREIGN KEY([EmailTypeId])
+REFERENCES [dbo].[EmailType] ([EmailTypeId])
+GO
+
+ALTER TABLE [dbo].[Email] CHECK CONSTRAINT [FK_EmailType_Email]
 GO
 
 
@@ -205,7 +216,8 @@ CREATE TABLE [dbo].[Users](
 	[UsersMiddleName] [varchar](max) NULL,
 	[UsersLastName] [varchar](max) NULL,
 	[UsersEmail] [varchar](max) NULL,
-	[UsersPassword] [varchar](max) NOT NULL
+	[UsersPassword] [varchar](max) NOT NULL,
+	[UsersModified] [datetime] NOT NULL DEFAULT GETDATE(),
  CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
 (
 	[UsersId] ASC
@@ -228,7 +240,8 @@ CREATE TABLE [dbo].[UserContact](
 	[UserContactId] [int] IDENTITY(1,1) NOT NULL,
 	[UsersId] [int] NOT NULL,
 	[ContactId] [int] NOT NULL,
-	[UserContactModified] [datetime] NOT NULL,
+	[IsUser] [int] NOT NULL DEFAULT 0,
+	[UserContactModified] [datetime] NOT NULL DEFAULT GETDATE(),
  CONSTRAINT [PK_UserContact] PRIMARY KEY CLUSTERED 
 (
 	[UserContactId] ASC

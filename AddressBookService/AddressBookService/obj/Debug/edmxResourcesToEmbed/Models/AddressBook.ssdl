@@ -29,7 +29,7 @@
     <Key>
       <PropertyRef Name="AddressTypeId" />
     </Key>
-    <Property Name="AddressTypeId" Type="int" Nullable="false" />
+    <Property Name="AddressTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AddressTypeCode" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="AddressTypeDescription" Type="varchar" MaxLength="50" />
     <Property Name="AddressTypeModified" Type="datetime" Nullable="false" />
@@ -39,9 +39,9 @@
       <PropertyRef Name="ContactId" />
     </Key>
     <Property Name="ContactId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ContactFirstName" Type="varchar" MaxLength="50" />
+    <Property Name="ContactFirstName" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="ContactMiddleName" Type="varchar" MaxLength="50" />
-    <Property Name="ContactLastName" Type="varchar" MaxLength="50" />
+    <Property Name="ContactLastName" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="ContactNickname" Type="varchar" MaxLength="50" />
     <Property Name="ContactCompany" Type="varchar" MaxLength="50" />
     <Property Name="ContactTitle" Type="varchar" MaxLength="50" />
@@ -74,7 +74,7 @@
     <Property Name="UserContactId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="UsersId" Type="int" Nullable="false" />
     <Property Name="ContactId" Type="int" Nullable="false" />
-    <Property Name="IsUser" Type="tinyint" Nullable="false" />
+    <Property Name="IsUser" Type="int" Nullable="false" />
     <Property Name="UserContactModified" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="Users">
@@ -85,7 +85,7 @@
     <Property Name="UsersFirstName" Type="varchar(max)" />
     <Property Name="UsersMiddleName" Type="varchar(max)" />
     <Property Name="UsersLastName" Type="varchar(max)" />
-    <Property Name="UsersEmail" Type="varchar(max)" Nullable="false" />
+    <Property Name="UsersEmail" Type="varchar(max)" />
     <Property Name="UsersPassword" Type="varchar(max)" Nullable="false" />
     <Property Name="UsersModified" Type="datetime" Nullable="false" />
   </EntityType>
@@ -122,18 +122,6 @@
       </Principal>
       <Dependent Role="Email">
         <PropertyRef Name="ContactId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Email_EmailType">
-    <End Role="EmailType" Type="Self.EmailType" Multiplicity="1" />
-    <End Role="Email" Type="Self.Email" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EmailType">
-        <PropertyRef Name="EmailTypeId" />
-      </Principal>
-      <Dependent Role="Email">
-        <PropertyRef Name="EmailTypeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -180,10 +168,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_Contact_Email" Association="Self.FK_Contact_Email">
       <End Role="Contact" EntitySet="Contact" />
-      <End Role="Email" EntitySet="Email" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Email_EmailType" Association="Self.FK_Email_EmailType">
-      <End Role="EmailType" EntitySet="EmailType" />
       <End Role="Email" EntitySet="Email" />
     </AssociationSet>
     <AssociationSet Name="FK_UserContact_Contact" Association="Self.FK_UserContact_Contact">
