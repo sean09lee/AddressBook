@@ -7,7 +7,8 @@ export default combineReducers({
 	allContacts,
 	allFilteredContacts,
 	selectedUser,
-	isEditMode
+	isEditMode,
+	searchTerm
 });
 
 export function itemsHasErrored(state = false, action) {
@@ -68,6 +69,16 @@ export function isEditMode(state = false, action) {
 	switch (action.type) {
 		case 'IS_EDIT_MODE':
 				return action.editMode;
+		default:
+				return state;
+	}
+}
+
+
+export function searchTerm(state = '', action) {
+	switch (action.type) {
+		case 'IS_SEARCHTERM':
+				return action.term;
 		default:
 				return state;
 	}

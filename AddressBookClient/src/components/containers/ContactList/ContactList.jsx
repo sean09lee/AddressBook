@@ -30,6 +30,10 @@ class ContactList extends Component {
 		console.log('Deleting contact ' + contact.ContactFirstName + '...');
 	}
 
+	componentWillReceiveProps(nextProps){
+		this.forceUpdate();
+	}
+
 	componentDidMount(){
 		//initialize subscription here
 		getContacts().then(results => {
@@ -42,7 +46,7 @@ class ContactList extends Component {
 
 	render() {
 		var data = [];
-		if (this.props.filteredContacts && this.props.filteredContacts.length > 0 ){
+		if (this.props.searchTerm.length > 0 ){
 			data = this.props.filteredContacts;
 		} else {
 			data = this.props.contacts;
@@ -79,8 +83,6 @@ class ContactList extends Component {
 		return (
 			<TearSheet>
 				<SearchBar
-					onChange={() => console.log('onChange')}
-					onRequestSearch={() => console.log('onRequestSearch')}
 					style={{
 						margin: '0 auto',
 						maxWidth: 800
@@ -126,7 +128,8 @@ const mapStateToProps = (state) => {
 		isLoading: state.itemsIsLoading,
 		contacts: state.allContacts,
 		filteredContacts: state.allFilteredContacts,
-		isEditMode: state.isEditMode
+		isEditMode: state.isEditMode,
+		searchTerm: state.searchTerm
 	};
 };
 

@@ -84,3 +84,16 @@ export function setEditMode(bool){
 		dispatch(editMode(bool));
 	};
 }
+
+export function searchTermType(term){
+	return {
+		type: 'IS_SEARCHTERM',
+		term
+	}
+}
+
+export function setSearchTerm(term){
+	return (dispatch) => {
+		dispatch(searchTermType(term));
+	};
+}

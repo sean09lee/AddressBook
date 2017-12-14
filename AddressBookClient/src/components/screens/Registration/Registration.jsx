@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { dispatch, connect } from 'react-redux';
+import { Redirect, Link, withRouter } from 'react-router-dom';
 import { CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Auth from '../../../utilities/AuthUtil';
-import './_registration.scss';
+import { setUser } from '../../../utilities/Actions';
 import { saveUser } from '../../../services/UserService';
+import './_registration.scss';
 
 class Registration extends Component {
 	constructor(props) {
@@ -18,7 +20,8 @@ class Registration extends Component {
 				UsersLastName: '',
 				UsersEmail: '',
 				UsersPassword: ''
-			}
+			},
+			redirectToReferrer: Auth.isUserAuthenticated()
 		};
 
 		this.onSubmit = this.onSubmit.bind(this);
@@ -44,11 +47,10 @@ class Registration extends Component {
 		const formData = `email=${email}&password=${password}`;
 
 		// TODO: Update this to make a call to the server api and save the JWT token from that call
-		saveUser(this.state.user).then(data => {
-			if (data.ok){
-				Auth.authenticateUser(formData);
-			} else {
-				Auth.deauthenticateUser();
+		saveUser(this.state.user).then((results) => {
+			if (results.ok){
+				return results.json();
+			}else {
 				this.setState({
 					errors : {
 						summary: 'Registration failed. Please enter a valid email.',
@@ -56,16 +58,25 @@ class Registration extends Component {
 					}
 				});
 			}
+		}).then(data => {
+			// store token locally
+			Auth.authenticateUser(data.UsersId);
+			
+			// Redirect to Home page
+			this.props.history.push("/home");
 		}).catch((error) => {
 			console.log(error);
 		});
-
-		// Redirect to Home page
-		this.props.history.push("/home");
 	}
 
 	render() {
-		let { errors, user } = this.state;
+		let { redirectToReferrer, errors, user } = this.state;
+		if ( redirectToReferrer ) {
+			return (
+				<Redirect to = { '/home' } />
+			)
+		}
+
 		return (
 			<form name="registrationForm" onSubmit={this.onSubmit} className="registration">
 				<h2 className="card-heading">Registration</h2>
@@ -123,4 +134,19 @@ class Registration extends Component {
 	}
 }
 
-export default withRouter(Registration);
+const mapStateToProps = (state) => {
+	return {
+			isLoading: state.itemsIsLoading,
+			user: state.selectedUser
+	};
+};
+
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setUser: (user) => dispatch(setUser(user))
+	};
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Registration));

@@ -15,7 +15,7 @@ class ContactCard extends Component {
 		super(props);
 		var defaultContact = {
 			ContactId: 0,
-			ContactFirstName: '',
+			ContactFirstName: 'First Name',
 			ContactMiddleName: '', 
 			ContactLastName: '',
 			ContactNotes: '',
@@ -31,7 +31,7 @@ class ContactCard extends Component {
 		}
 		this.state = {
 			contact: defaultContact,
-			editMode: false
+			editMode: true
 		};
 	}
 
@@ -40,6 +40,7 @@ class ContactCard extends Component {
 			contact: nextProps.contact,
 			editMode: nextProps.editMode
 		});
+		this.forceUpdate();
 	}
 
 	render() {
@@ -68,22 +69,50 @@ class ContactCard extends Component {
 		}
 		var fullName = firstName + " " + middleName + " " + lastName;
 
-		//else
+		let Phones = null;
+		if (this.state.contact.Phones && this.state.contact.Phones > 0){
+
+		}
+
+		let Emails = null;
+		if (this.state.contact.Emails && this.state.contact.Emails > 0){
+
+		}
+
+		let Addresses = null;
+		if (this.state.contact.Addresses && this.state.contact.Addresses > 0){
+
+		}
+
+		// set defaults
+		if (!this.state.contact.ContactId){
+			fullName = "Full Name";
+		}
+
 		return (
-			<Card>
+			<Card className="contactCard">
 				<CardHeader
 					title={fullName}
-					subtitle={this.state.contact.ContactNickName}
+					subtitle={this.state.contact.ContactNickname}
 					avatar={DefaultAvatar}
-					actAsExpander={false}
-					showExpandableButton={false}
 				/>
-				<CardTitle title="Title" subtitle="Card subtitle" />
+				<CardTitle title={this.state.contact.ContactCompany} 
+					subtitle={this.state.contact.ContactTitle} />
+				<CardText>
+					<p>Phone Numbers</p>
+					{Phones}
+				</CardText>
 				<CardText >
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-					Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-					Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-					Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+					<p>Emails</p>
+					{Emails}
+				</CardText>
+				<CardText >
+					<p>Addresses</p>
+					{Addresses}
+				</CardText>
+				<CardText>
+					<p>Notes</p>
+					{this.state.contact.ContactNotes}
 				</CardText>
 				<CardActions className="flex-container">
 					{DeleteButton}

@@ -14,6 +14,17 @@ import './_editContactCard.scss';
 class EditContactCard extends Component {
 	constructor(props) {
 		super(props);
+		var address = {
+			AddressId: null,
+			ContactId: null,
+			AddressTypeId: null,
+			AddressLine1: '',
+			AddressLine2: '',
+			AddressCity: '',
+			AddressState: '',
+			AddressZip: '',
+			AddressCountry: ''
+		};
 		var defaultContact = {
 			ContactId: null,
 			ContactFirstName: '',
@@ -23,7 +34,7 @@ class EditContactCard extends Component {
 			ContactNotes: '',
 			ContactCompany: '',
 			ContactTitle: '',
-			Addresses: [],
+			Addresses: [address],
 			Emails: [],
 			UserContacts: []
 		};
@@ -36,8 +47,9 @@ class EditContactCard extends Component {
 			value: ''
 		};
 
-		this.addNewEmail = this.addNewEmail.bind(this);
-		this.addNewAddress = this.addNewAddress.bind(this);
+		this.handleNewPhone = this.handleNewPhone.bind(this);
+		this.handleNewEmail = this.handleNewEmail.bind(this);
+		this.handleNewAddress = this.handleNewAddress.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 	}
 
@@ -47,11 +59,34 @@ class EditContactCard extends Component {
 		});
 	}
 
-	addNewEmail(){
-		console.log('adding new email...');
+	handleNewPhone(){
+		console.log('adding new phone...');
+		var phone = {
+			PhoneNumber: null,
+			PhoneType: null
+		};
+		var contactCopy = this.state.contact;
+		contactCopy.PhoneNumber.push(email);
+		this.setState({
+			contact : contactCopy
+		});
 	}
 
-	addNewAddress(){
+	handleNewEmail(){
+		console.log('adding new email...');
+		var email = {
+			EmailId: null,
+			EmailTypeId: null,
+			EmailAddress: '',
+		};
+		var contactCopy = this.state.contact;
+		contactCopy.Emails.push(email);
+		this.setState({
+			contact : contactCopy
+		});
+	}
+
+	handleNewAddress(){
 		console.log('adding new address');
 		var address = {
 			AddressId: null,
@@ -64,8 +99,10 @@ class EditContactCard extends Component {
 			AddressZip: '',
 			AddressCountry: ''
 		};
+		var contactCopy = this.state.contact;
+		contactCopy.Addresses.push(address);
 		this.setState({
-
+			contact : contactCopy
 		});
 	}
 
@@ -85,19 +122,45 @@ class EditContactCard extends Component {
 		if (this.state.contact.ContactId){
 			DeleteButton =	<DeleteContact contactId={this.state.contact.ContactId}/>;
 		}
-		let Addresses = <div>
-			<TextField hintText="Address Line 1" floatingLabelText="Address Line 1" underlineShow={false} />
-			<TextField hintText="Address Line 2" floatingLabelText="Address Line 2" underlineShow={false} />
-			<TextField hintText="City" floatingLabelText="City" underlineShow={false} />
-			<TextField hintText="State" floatingLabelText="State" underlineShow={false} />
-			<TextField hintText="Country" floatingLabelText="Country" underlineShow={false} />
-			<TextField hintText="ZIP Code" floatingLabelText="ZIP Code" underlineShow={false} />
-		</div>;
+
+		// Define addresses
+		let Addresses = null;
 		if (this.state.contact.Addresses && this.state.contact.Addresses.length > 0){
-			for (var i=0; i < this.state.contact.Addresses.length; i++){
-				//Addresses.
-			}
+			Addresses = this.state.contact.Addresses.map(input => 
+				<div key={input.AddressId}>
+					<TextField hintText="Address Line 1" floatingLabelText="Address Line 1" underlineShow={false} value={input.AddressLine1} onChange={this.handleInputChange}/>
+					<TextField hintText="Address Line 2" floatingLabelText="Address Line 2" underlineShow={false} value={input.AddressLine2} onChange={this.handleInputChange}/>
+					<TextField hintText="City" floatingLabelText="City" underlineShow={false} value={input.AddressCity} onChange={this.handleInputChange}/>
+					<TextField hintText="State" floatingLabelText="State" underlineShow={false} value={input.AddressState} onChange={this.handleInputChange}/>
+					<TextField hintText="Country" floatingLabelText="Country" underlineShow={false} value={input.AddressCountry} onChange={this.handleInputChange}/>
+					<TextField hintText="ZIP Code" floatingLabelText="ZIP Code" underlineShow={false} value={input.AddressZip} onChange={this.handleInputChange}/>
+				</div>
+			)
 		}
+
+		let Emails = null;
+		if (this.state.contact.Emails && this.state.contact.Emails.length > 0){
+			Emails = this.state.contact.Emails.map(input => 
+				<div className="emails">
+					<TextField type="email" hintText="Email" floatingLabelText="Email" 
+					name={"ContactEmail" + input.EmailId}
+					underlineShow={false} value={input.EmailAddress} onChange={this.handleInputChange}/>
+				</div>
+			)
+		}
+
+		let Phones = null;
+		if (this.state.contact.Phones && this.state.contact.Phones.length > 0){
+			Emails = this.state.contact.Phones.map(input => 
+				<div className="phones">
+					<TextField hintText="Phone Number" floatingLabelText="Phone Number" 
+					underlineShow={false} value={input.PhoneNumber} onChange={this.handleInputChange}/>
+					<TextField hintText="Phone Type" floatingLabelText="Phone Type" 
+					underlineShow={false} value={input.PhoneType} onChange={this.handleInputChange}/>
+				</div>
+			)
+		}
+
 		return (
 		<Card className="editContactCard">
 			<CardHeader avatar={DefaultAvatar}>
@@ -122,28 +185,32 @@ class EditContactCard extends Component {
 			<Divider />
 			<CardTitle>
 				<TextField hintText="Company" floatingLabelText="Company" underlineShow={false} 
-					name="ContactCompany" value={this.state.contact.ContactCompany}/>
-				<TextField hintText="Title" floatingLabelText="Title" underlineShow={false} />
+					name="ContactCompany" value={this.state.contact.ContactCompany}
+					onChange={this.handleInputChange}/>
+				<TextField hintText="Title" floatingLabelText="Title" underlineShow={false} 
+					name="ContactTitle" value={this.state.contact.ContactTitle} 
+					onChange={this.handleInputChange}/>
 			</CardTitle>
 			<Divider />
 			<CardText >
-				<div><FlatButton label="Add new phone"/></div>
-				<TextField hintText="Phone Number" floatingLabelText="Phone Number" underlineShow={false} />
-				<TextField hintText="Phone Type" floatingLabelText="Phone Type" underlineShow={false} />
+				<div><FlatButton label="Add new phone" onClick={this.handleNewPhone}/></div>
+				{ Phones }
 			</CardText>
 			<Divider />
 			<CardText >
-				<div><FlatButton label="Add new address"/></div>
+				<div><FlatButton label="Add new address" onClick={this.handleNewAddress}/></div>
 				{ Addresses }
 			</CardText>
 			<Divider />
 			<CardText >
-				<div><FlatButton label="Add new email"/></div>
-				<TextField hintText="Email" floatingLabelText="Email" underlineShow={false} />
+				<div><FlatButton label="Add new email" onClick={this.handleNewEmail}/></div>
+				{ Emails }
 			</CardText>
 			<Divider />
 			<CardText >
-				<TextField hintText="Notes" floatingLabelText="Notes" underlineShow={false} />
+				<TextField hintText="Notes" floatingLabelText="Notes" underlineShow={false} 
+					name="ContactNotes" value={this.state.contact.ContactNotes} 
+					onChange={this.handleInputChange}/>
 			</CardText>
 			<CardActions className="flex-container">
 				{ DeleteButton }

@@ -68,6 +68,12 @@ namespace AddressBookService.Controllers
                     {
                         // update if exists
                         existingAddress = address;
+                        var local = db.Set<Address>().Local.FirstOrDefault(f => f.AddressId == existingAddress.AddressId);
+                        if (local != null)
+                        {
+                            db.Entry(local).State = EntityState.Detached;
+                        }
+                        db.Entry(existingAddress).State = EntityState.Modified;
                     }
 
                     // Update dbo.AddressType
@@ -82,6 +88,12 @@ namespace AddressBookService.Controllers
                     {
                         // update if exists
                         existingAddressType = address.AddressType;
+                        var local = db.Set<AddressType>().Local.FirstOrDefault(f => f.AddressTypeId == existingAddressType.AddressTypeId);
+                        if (local != null)
+                        {
+                            db.Entry(local).State = EntityState.Detached;
+                        }
+                        db.Entry(existingAddressType).State = EntityState.Modified;
                     }
                 }
                 
@@ -99,6 +111,12 @@ namespace AddressBookService.Controllers
                     {
                         // update if exists
                         existingEmail = email;
+                        var local = db.Set<Email>().Local.FirstOrDefault(f => f.EmailId == existingEmail.EmailId);
+                        if (local != null)
+                        {
+                            db.Entry(local).State = EntityState.Detached;
+                        }
+                        db.Entry(existingEmail).State = EntityState.Modified;
                     }
 
                     // Update dbo.EmailType
@@ -113,6 +131,12 @@ namespace AddressBookService.Controllers
                     {
                         // update if exists
                         existingEmailType = email.EmailType;
+                        var local = db.Set<EmailType>().Local.FirstOrDefault(f => f.EmailTypeId == existingEmailType.EmailTypeId);
+                        if (local != null)
+                        {
+                            db.Entry(local).State = EntityState.Detached;
+                        }
+                        db.Entry(existingEmailType).State = EntityState.Modified;
                     }
                 }
 
@@ -130,6 +154,12 @@ namespace AddressBookService.Controllers
                     {
                         // update if exists
                         existingUserContact = userContact;
+                        var local = db.Set<UserContact>().Local.FirstOrDefault(f => f.UserContactId == existingUserContact.UserContactId);
+                        if (local != null)
+                        {
+                            db.Entry(local).State = EntityState.Detached;
+                        }
+                        db.Entry(existingUserContact).State = EntityState.Modified;
                     }
                     
                 }
@@ -144,6 +174,12 @@ namespace AddressBookService.Controllers
                 else
                 {
                     existingContact = contact;
+                    var local = db.Set<Contact>().Local.FirstOrDefault(f => f.ContactId == existingContact.ContactId);
+                    if (local != null)
+                    {
+                        db.Entry(local).State = EntityState.Detached;
+                    }
+                    db.Entry(existingContact).State = EntityState.Modified;
                 }
 
                 await db.SaveChangesAsync();

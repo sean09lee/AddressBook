@@ -31,7 +31,10 @@ class Home extends Component {
 					<ContactList className="item" />
 					{(function(isLoading, contact) {
 						if (isLoading) {
-							return (<Loading />);
+							return (
+							<ContactCard>
+								<Loading />
+							</ContactCard>);
 						}
 						return (<ContactCard className="item" contact={contact}/>);
 					})(this.state.isLoading, this.state.contact)}

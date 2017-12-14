@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { dispatch, connect } from 'react-redux';
-import { setContacts, setFilteredContacts } from '../../../utilities/Actions';
+import { setContacts, setFilteredContacts, setSearchTerm } from '../../../utilities/Actions';
 import MaterialSearchBar from 'material-ui-search-bar';
 
 class SearchBar extends Component {
@@ -23,10 +23,11 @@ class SearchBar extends Component {
 		var contactList = this.props.contacts;
 		var filteredList = contactList.filter(contact => (
 			contact.ContactFirstName.trim().toLowerCase() 
-			+ " " + contact.ContactFirstName.trim().toLowerCase())
+			+ " " + contact.ContactLastName.trim().toLowerCase())
 			.includes(caseInsensitiveSearchTerm)
 		);
 		this.props.fetchFilteredData(filteredList);
+		this.props.setSearchTerm(newValue);
 	}
 
 	handleSearchRequest(){
@@ -53,14 +54,16 @@ class SearchBar extends Component {
 const mapStateToProps = (state) => {
 	return {
 		contacts: state.allContacts,
-		filteredContacts: state.allFilteredContacts
+		filteredContacts: state.allFilteredContacts,
+		searchTerm: state.searchTerm
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		fetchData: (contact) => dispatch(setContacts(contact)),
-		fetchFilteredData: (contacts) => dispatch(setFilteredContacts(contacts))
+		fetchFilteredData: (contacts) => dispatch(setFilteredContacts(contacts)),
+		setSearchTerm: (searchTerm) => dispatch(setSearchTerm(searchTerm))
 	};
 };
 

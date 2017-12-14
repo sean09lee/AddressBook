@@ -11,7 +11,28 @@ import './_headerBar.scss';
 class HeaderBar extends Component {
 	constructor(props){
 		super(props);
+		this.state = {
+			title: this.props.user.UsersEmail
+		}
 		this.logout = this.logout.bind(this);
+	}
+	componentWillReceiveProps(props){
+		console.log(props);
+	}
+
+	componentWillMount(nextProps) {
+		if (nextProps){
+			var firstName = nextProps.user.UsersFirstName
+			var lastName = nextProps.user.UsersLastName
+			var title = nextProps.user.UsersEmail;
+			if (firstName && lastName)
+			{
+				title = firstName + " " + lastName;
+			}
+			this.setState({
+				title: title
+			});
+		}
 	}
 
 	logout() {
@@ -21,17 +42,11 @@ class HeaderBar extends Component {
 	}
 
 	render(){
-		var firstName = this.props.user.UsersFirstName
-		var lastName = this.props.user.UsersLastName
-		var title = this.props.user.UsersEmail;
-		if (firstName && lastName)
-		{
-			title = firstName + " " + lastName;
-		}
+
 
 		return (
 			<AppBar
-				title={<span>{title}</span>}
+				title={<span>{this.state.title}</span>}
 				iconElementLeft={<Avatar src={DefaultAvatar} />}
 				iconElementRight={<FlatButton label="Logout" onClick={this.logout} />}
 			/>
