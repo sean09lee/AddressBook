@@ -15,10 +15,17 @@ class EditContactCard extends Component {
 	constructor(props) {
 		super(props);
 		var defaultContact = {
+			ContactId: null,
 			ContactFirstName: '',
 			ContactMiddleName: '', 
 			ContactLastName: '',
-			ContactNotes: ''
+			ContactNickname: '',
+			ContactNotes: '',
+			ContactCompany: '',
+			ContactTitle: '',
+			Addresses: [],
+			Emails: [],
+			UserContacts: []
 		};
 		if (this.props.contact && this.props.contact != []){
 			defaultContact = this.props.contact;
@@ -29,7 +36,6 @@ class EditContactCard extends Component {
 			value: ''
 		};
 
-		let jasper = {...this.state.contact};
 		this.addNewEmail = this.addNewEmail.bind(this);
 		this.addNewAddress = this.addNewAddress.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
@@ -47,15 +53,31 @@ class EditContactCard extends Component {
 
 	addNewAddress(){
 		console.log('adding new address');
+		var address = {
+			AddressId: null,
+			ContactId: this.state.contact.ContactId,
+			AddressTypeId: null,
+			AddressLine1: '',
+			AddressLine2: '',
+			AddressCity: '',
+			AddressState: '',
+			AddressZip: '',
+			AddressCountry: ''
+		};
+		this.setState({
+
+		});
 	}
 
 	handleInputChange(event) {
-		const target = event.target;
-		const value = target.value;
-		const name = target.name;
+		const field = event.target.name;
+		const contact = this.state.contact;
+		contact[field] = event.target.value;
 
 		// update value
-		this.state.contact[name] = value;
+		this.setState({
+			contact
+		});
 	}
 
 	render() {
@@ -63,24 +85,44 @@ class EditContactCard extends Component {
 		if (this.state.contact.ContactId){
 			DeleteButton =	<DeleteContact contactId={this.state.contact.ContactId}/>;
 		}
+		let Addresses = <div>
+			<TextField hintText="Address Line 1" floatingLabelText="Address Line 1" underlineShow={false} />
+			<TextField hintText="Address Line 2" floatingLabelText="Address Line 2" underlineShow={false} />
+			<TextField hintText="City" floatingLabelText="City" underlineShow={false} />
+			<TextField hintText="State" floatingLabelText="State" underlineShow={false} />
+			<TextField hintText="Country" floatingLabelText="Country" underlineShow={false} />
+			<TextField hintText="ZIP Code" floatingLabelText="ZIP Code" underlineShow={false} />
+		</div>;
+		if (this.state.contact.Addresses && this.state.contact.Addresses.length > 0){
+			for (var i=0; i < this.state.contact.Addresses.length; i++){
+				//Addresses.
+			}
+		}
 		return (
 		<Card className="editContactCard">
 			<CardHeader avatar={DefaultAvatar}>
-				<TextField 
-					floatingLabelText="First Name" 
-					underlineShow={false} 
-					ref={(input) => this.input = input}
-					name="ContactFirstName" 
-					value={this.state.contact.ContactFirstName} 
-					onChange={this.handleInputChange}/>
-				<TextField floatingLabelText="Middle Name" underlineShow={false}
-					name="ContactMiddleName" value={this.state.contact.ContactMiddleName} onChange={this.handleInputChange}/>
-				<TextField floatingLabelText="Last Name" underlineShow={false} 
-					name="ContactLastName" value={this.state.contact.ContactLastName} onChange={this.handleInputChange}/>
+				<div>
+					<TextField 
+						floatingLabelText="First Name" underlineShow={false} hintText="First Name"
+						name="ContactFirstName" value={this.state.contact.ContactFirstName} 
+						onChange={this.handleInputChange}/>
+					<TextField floatingLabelText="Middle Name" underlineShow={false} hintText="Middle Name"
+						name="ContactMiddleName" value={this.state.contact.ContactMiddleName} 
+						onChange={this.handleInputChange}/>
+					<TextField floatingLabelText="Last Name" underlineShow={false} hintText="Last Name"
+						name="ContactLastName" value={this.state.contact.ContactLastName} 
+						onChange={this.handleInputChange}/>
+				</div>
+				<div>
+					<TextField floatingLabelText="Nickname" underlineShow={false} hintText="Nickname"
+						name="ContactNickname" value={this.state.contact.ContactNickname} 
+						onChange={this.handleInputChange}/>
+				</div>
 			</CardHeader>
 			<Divider />
 			<CardTitle>
-				<TextField hintText="Company" floatingLabelText="Company" underlineShow={false} />
+				<TextField hintText="Company" floatingLabelText="Company" underlineShow={false} 
+					name="ContactCompany" value={this.state.contact.ContactCompany}/>
 				<TextField hintText="Title" floatingLabelText="Title" underlineShow={false} />
 			</CardTitle>
 			<Divider />
@@ -92,11 +134,7 @@ class EditContactCard extends Component {
 			<Divider />
 			<CardText >
 				<div><FlatButton label="Add new address"/></div>
-				<TextField hintText="Address Line" floatingLabelText="Address Line" underlineShow={false} />
-				<TextField hintText="City" floatingLabelText="City" underlineShow={false} />
-				<TextField hintText="State" floatingLabelText="State" underlineShow={false} />
-				<TextField hintText="Country" floatingLabelText="Country" underlineShow={false} />
-				<TextField hintText="ZIP Code" floatingLabelText="ZIP Code" underlineShow={false} />
+				{ Addresses }
 			</CardText>
 			<Divider />
 			<CardText >

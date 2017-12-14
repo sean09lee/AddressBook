@@ -60,10 +60,11 @@ class ContactList extends Component {
 					<Delete />
 				</IconButton>
 			);
+			const fullName = contact.ContactFirstName + " " + contact.ContactLastName;
 			return( 
 				<ListItem 
 					key={contact.ContactId}
-					primaryText={contact.ContactFirstName + " " + contact.ContactLastName}
+					primaryText={fullName}
 					leftAvatar={<Avatar src={ DefaultAvatar } />}
 					rightIconButton={rightButton}
 					onClick={() => {
@@ -115,7 +116,7 @@ ContactList.propTypes = {
 	setContacts: PropTypes.func.isRequired,
 	hasErrored: PropTypes.bool.isRequired,
 	isLoading: PropTypes.bool.isRequired,
-	filteredContacts: PropTypes.func.isRequired
+	filteredContacts: PropTypes.array.isRequired
 };
 
 const mapStateToProps = (state) => {

@@ -33,6 +33,13 @@ export function itemsFetchFilteredContactsSuccess(contacts){
 	}
 }
 
+export function itemsFetchUserSuccess(user){
+	return {
+		type: 'ITEMS_FETCH_USER_SUCCESS',
+		user
+	}
+}
+
 // set data related to a single contact
 export function setContact(contact) {
 	return (dispatch) => {
@@ -54,6 +61,14 @@ export function setFilteredContacts(contacts) {
 	return (dispatch) => {
 		dispatch(itemsIsLoading(true));
 		dispatch(itemsFetchFilteredContactsSuccess(contacts));
+	};
+}
+
+// set data related to a current user
+export function setUser(user) {
+	return (dispatch) => {
+		dispatch(itemsIsLoading(true));
+		dispatch(itemsFetchUserSuccess(user));
 	};
 }
 

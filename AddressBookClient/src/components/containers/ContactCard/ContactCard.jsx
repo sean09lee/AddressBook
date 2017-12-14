@@ -14,10 +14,17 @@ class ContactCard extends Component {
 	constructor(props) {
 		super(props);
 		var defaultContact = {
+			ContactId: 0,
 			ContactFirstName: '',
 			ContactMiddleName: '', 
 			ContactLastName: '',
-			ContactNotes: ''
+			ContactNotes: '',
+			ContactNickName: '',
+			ContactCompany: '',
+			ContactTitle: '',
+			Addresses: [],
+			Emails: [],
+			UserContacts: []
 		};
 		if (this.props.contact && this.props.contact.length > 0){
 			defaultContact = this.props.contact;
@@ -47,12 +54,26 @@ class ContactCard extends Component {
 			DeleteButton =	<DeleteContact contactId={this.state.contact.ContactId}/>;
 		}
 
+		var firstName = "";
+		if (this.state.contact.ContactFirstName){
+			firstName = this.state.contact.ContactFirstName;
+		}
+		var middleName = "";
+		if (this.state.contact.ContactMiddleName){
+			middleName = this.state.contact.ContactMiddleName;
+		} 
+		var lastName = "";
+		if (this.state.contact.ContactLastName){
+			lastName = this.state.contact.ContactLastName;
+		}
+		var fullName = firstName + " " + middleName + " " + lastName;
+
 		//else
 		return (
 			<Card>
 				<CardHeader
-					title={this.state.contact.ContactFirstName + this.state.contact.ContactLastName}
-					subtitle="Subtitle"
+					title={fullName}
+					subtitle={this.state.contact.ContactNickName}
 					avatar={DefaultAvatar}
 					actAsExpander={false}
 					showExpandableButton={false}

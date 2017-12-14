@@ -13,6 +13,7 @@ class RefreshButton extends Component {
 
 	handleRefresh(){
 		// call db for all contacts
+		console.log('Refreshing contact list...');
 		getContacts().then(results => {
 			return results.json();
 		}).then(
@@ -20,6 +21,7 @@ class RefreshButton extends Component {
 				// reset the redux props
 				this.props.setContacts(data);
 				this.props.setFilteredContacts(data);
+				console.log('Refresh complete.');
 		});
 	}
 

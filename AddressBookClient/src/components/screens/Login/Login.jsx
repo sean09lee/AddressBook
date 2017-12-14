@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { dispatch, connect } from 'react-redux';
 import { Redirect, Link, withRouter } from 'react-router-dom';
 import { CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Auth from '../../../utilities/AuthUtil';
+import { setUser } from '../../../utilities/Actions';
 import { getUser } from '../../../services/UserService';
 import './_login.scss';
 
@@ -38,12 +40,9 @@ class Login extends Component {
 		event.preventDefault();
 		
 		// TODO: Update this to save the JWT token
-		getUser(this.state.user).then(data => {
-			if (data.ok){
-				Auth.authenticateUser();
-
-				// Redirect to Home page
-				this.props.history.push("/home");
+		getUser(this.state.user).then(results => {
+			if (results.ok){
+				return results.json();
 			}
 			else {
 				Auth.deauthenticateUser();
@@ -52,9 +51,17 @@ class Login extends Component {
 						summary: 'Login failed. Please enter a valid email and password.'
 					}
 				});
+				return;
 			}
+		}).then(data => {
+			// Set token and redux prop
+			Auth.authenticateUser(data.UsersId);
+			this.props.setUser(data);
+
+			// Redirect to Home page
+			this.props.history.push("/home");
 		}).catch(() => {
-			Auth.deauthenticateUser();
+			Auth.deauthenticateUser(this.props.user.UsersId);
 			this.setState({
 				errors : {
 					summary: 'Login failed. This may be due to a bad internet connection. Please try again.'
@@ -106,4 +113,18 @@ class Login extends Component {
 	}
 }
 
-export default withRouter(Login);
+const mapStateToProps = (state) => {
+	return {
+			isLoading: state.itemsIsLoading,
+			user: state.selectedUser
+	};
+};
+
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setUser: (user) => dispatch(setUser(user))
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));

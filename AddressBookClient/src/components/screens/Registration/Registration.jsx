@@ -45,7 +45,19 @@ class Registration extends Component {
 
 		// TODO: Update this to make a call to the server api and save the JWT token from that call
 		saveUser(this.state.user).then(data => {
-			Auth.authenticateUser(formData);
+			if (data.ok){
+				Auth.authenticateUser(formData);
+			} else {
+				Auth.deauthenticateUser();
+				this.setState({
+					errors : {
+						summary: 'Registration failed. Please enter a valid email.',
+						email: 'A user already has this email. Please use a different one.'
+					}
+				});
+			}
+		}).catch((error) => {
+			console.log(error);
 		});
 
 		// Redirect to Home page

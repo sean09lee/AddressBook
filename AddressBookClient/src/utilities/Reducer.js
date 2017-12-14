@@ -6,6 +6,7 @@ export default combineReducers({
 	itemsIsLoading,
 	allContacts,
 	allFilteredContacts,
+	selectedUser,
 	isEditMode
 });
 
@@ -51,6 +52,15 @@ export function allFilteredContacts(state = [], action){
 			return action.contacts
 		default:
 			return state;
+	}
+}
+
+export function selectedUser(state = [], action) {
+	switch (action.type) {
+		case 'ITEMS_FETCH_USER_SUCCESS':
+				return action.user;
+		default:
+				return state;
 	}
 }
 
