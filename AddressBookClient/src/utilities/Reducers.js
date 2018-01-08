@@ -1,10 +1,7 @@
 import { combineReducers } from 'redux';
 import { REHYDRATE } from 'redux-persist';
 
-const INITIAL_STATE = {
-	currentUser: [],
-	isLoggingIn: false,
-};
+const INITIAL_STATE = [];
 
 export function itemsHasErrored(state = false, action) {
 	switch (action.type) {
@@ -58,7 +55,7 @@ export function selectedUser(state = INITIAL_STATE, action) {
 		case 'ITEMS_FETCH_USER_SUCCESS':
 			return action.user;
 		default:
-			return [];
+			return state;
 	}
 }
 

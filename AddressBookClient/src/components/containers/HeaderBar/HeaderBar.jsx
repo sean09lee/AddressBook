@@ -35,9 +35,6 @@ class HeaderBar extends Component {
 				title: title
 			});
 		}
-		// persistStore(store, {}, () => {
-		// 	this.setState({rehydrated: true})
-		// })
 	}
 
 	logout() {
