@@ -187,6 +187,7 @@ namespace AddressBookService.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                throw new Exception();
             }
             return CreatedAtRoute("DefaultApi", new { id = contact.ContactId }, contact);
         }

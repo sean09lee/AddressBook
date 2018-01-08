@@ -1,15 +1,10 @@
 import { combineReducers } from 'redux';
+import { REHYDRATE } from 'redux-persist';
 
-export default combineReducers({
-	selectedContact,
-	itemsHasErrored,
-	itemsIsLoading,
-	allContacts,
-	allFilteredContacts,
-	selectedUser,
-	isEditMode,
-	searchTerm
-});
+const INITIAL_STATE = {
+	currentUser: [],
+	isLoggingIn: false,
+};
 
 export function itemsHasErrored(state = false, action) {
 	switch (action.type) {
@@ -56,12 +51,14 @@ export function allFilteredContacts(state = [], action){
 	}
 }
 
-export function selectedUser(state = [], action) {
+export function selectedUser(state = INITIAL_STATE, action) {
 	switch (action.type) {
+		case REHYDRATE:
+			return action.payload.selectedUser;
 		case 'ITEMS_FETCH_USER_SUCCESS':
-				return action.user;
+			return action.user;
 		default:
-				return state;
+			return [];
 	}
 }
 
@@ -74,7 +71,6 @@ export function isEditMode(state = false, action) {
 	}
 }
 
-
 export function searchTerm(state = '', action) {
 	switch (action.type) {
 		case 'IS_SEARCHTERM':
@@ -83,3 +79,14 @@ export function searchTerm(state = '', action) {
 				return state;
 	}
 }
+
+export default combineReducers({
+	selectedContact,
+	itemsHasErrored,
+	itemsIsLoading,
+	allContacts,
+	allFilteredContacts,
+	selectedUser,
+	isEditMode,
+	searchTerm
+});

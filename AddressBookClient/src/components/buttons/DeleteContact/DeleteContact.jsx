@@ -13,30 +13,32 @@ class DeleteContact extends Component {
 
 	deleteContact(){
 		console.log('Deleting contact id ' + this.props.contactId);
-		if (deleteContact(this.props.contactId)){
+		deleteContact(this.props.contactId).then(() => {
 			// remove from contacts
 			var contacts = this.props.contacts;
 			this.removeFromContacts(contacts, this.props.contactId);
 
 			// remove from filtered contacts
 			var filteredContacts = this.props.filteredContacts;
-			this.removeFromContacts(filteredContacts, this.props.contactId);
+			if (contacts.length != filteredContacts.length){
+				this.removeFromContacts(filteredContacts, this.props.contactId);
+			}
 
 			// reset the redux props
 			this.props.setContacts(contacts);
 			this.props.setFilteredContacts(filteredContacts);
 
-			console.log('Contact deleted.');
-		}
-		else {
+			this.forceUpdate();
+			console.log('contact deleted successfully');
+		}).catch(() => {
 			alert('Oh no! Something went wrong. Please try again.');
-		};
+		})
 	}
 
 	removeFromContacts(contacts, contactId){
 		contacts.splice(
 			contacts.findIndex(function(obj) {
-			return obj.ContactId === contactId;
+				return obj.ContactId === contactId;
 		}), 1);
 	}
 

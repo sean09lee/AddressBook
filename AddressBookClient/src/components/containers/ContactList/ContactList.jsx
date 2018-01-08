@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { dispatch, connect } from 'react-redux';
-import { setContact, setContacts, setEditMode } from '../../../utilities/Actions';
-import { getContacts } from '../../../services/ContactService';
+import { setContact, setContacts, setFilteredContacts, setEditMode } from '../../../utilities/Actions';
+import { getContacts, deleteContact } from '../../../services/ContactService';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
@@ -20,15 +20,42 @@ class ContactList extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			requestFailed: false,
-			deleteId: null
+			requestFailed: false
 		}
 
 		this.deleteContact = this.deleteContact.bind(this);
+		this.removeFromContacts = this.removeFromContacts.bind(this);
 	}
 
-	deleteContact(){
-		console.log('Deleting contact ' + this.state.deleteId + '...');
+	deleteContact(contactId){
+		console.log('Deleting contact ' + contactId + '...');
+		deleteContact(contactId).then(() => {
+			// remove from contacts
+			var contacts = this.props.contacts;
+			this.removeFromContacts(contacts, contactId);
+
+			// remove from filtered contacts
+			var filteredContacts = this.props.filteredContacts;
+			if (contacts.length != filteredContacts.length){
+				this.removeFromContacts(filteredContacts, contactId);
+			}
+
+			// reset the redux props
+			this.props.setContacts(contacts);
+			this.props.setFilteredContacts(filteredContacts);
+
+			console.log('contact deleted successfully');
+			this.forceUpdate();
+		}).catch(() => {
+			console.log('contact failed to delete');
+		});
+	}
+
+	removeFromContacts(contactsList, contactId){
+		var index = contactsList.findIndex(function(obj) {
+			return obj.ContactId === contactId;
+		});
+		contactsList.splice(index, 1);
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -61,8 +88,7 @@ class ContactList extends Component {
 					tooltip="Delete"
 					tooltipPosition="bottom-left"
 					onClick={() => {
-						this.setState({ deleteId: contact.ContactId});
-						this.deleteContact;
+						this.deleteContact(contact.ContactId);
 					}}
 				>
 					<Delete />
@@ -141,7 +167,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		setContact: (contact) => dispatch(setContact(contact)),
 		setContacts: (contacts) => dispatch(setContacts(contacts)),
-		setEditMode: (bool) => dispatch(setEditMode(bool))
+		setEditMode: (bool) => dispatch(setEditMode(bool)),
+		setFilteredContacts: (contacts) => dispatch(setFilteredContacts(contacts))
 	};
 };
 

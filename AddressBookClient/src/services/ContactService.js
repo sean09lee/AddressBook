@@ -26,5 +26,7 @@ export function saveContact(contact){
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(contact)
+	}).then((results) => {
+		return results.json();
 	});
 }

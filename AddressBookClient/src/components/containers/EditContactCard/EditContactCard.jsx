@@ -37,7 +37,8 @@ class EditContactCard extends Component {
 			ContactTitle: '',
 			Addresses: [address],
 			Emails: [],
-			UserContacts: []
+			UserContacts: [],
+			Phones: []
 		};
 		if (this.props.contact && this.props.contact != []){
 			defaultContact = this.props.contact;
@@ -53,6 +54,7 @@ class EditContactCard extends Component {
 		this.handleNewAddress = this.handleNewAddress.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleAddressChange = this.handleAddressChange.bind(this);
+		this.handleDeleteAddress = this.handleDeleteAddress.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -68,10 +70,10 @@ class EditContactCard extends Component {
 			PhoneType: null
 		};
 		var contactCopy = this.state.contact;
-		if(!contactCopy.PhoneNumber){
-			contactCopy.PhoneNumber = []
+		if(!contactCopy.Phones){
+			contactCopy.Phones = []
 		}
-		contactCopy.PhoneNumber.push(email);
+		contactCopy.Phones.push(email);
 		this.setState({
 			contact : contactCopy
 		});
@@ -118,6 +120,19 @@ class EditContactCard extends Component {
 		});
 	}
 
+	handleDeleteAddress(event){
+		var index = event.target.name;
+		var contactCopy = this.state.contact;
+		if (!contactCopy.Addresses){
+			contactCopy.Addresses = [];
+		}
+		contactCopy.Addresses.splice(index, 1);
+
+		this.setState({
+			contact : contactCopy
+		});
+	}
+
 	handleInputChange(event) {
 		const field = event.target.name;
 		const contact = this.state.contact;
@@ -153,13 +168,18 @@ class EditContactCard extends Component {
 			for (var i = 0; i < addresses.length; i++) {
 				Addresses.push(
 					<div className="addresses" key={i}>
+						<div className="flex-container">
 						<TextField hintText="Address Line 1" floatingLabelText="Address Line 1" 
 						underlineShow={false} value={addresses[i].AddressLine1}
 						name={"AddressLine1"} onChange={this.handleAddressChange}
-						title={i}/>
+						title={i} fullWidth={true}/>
+						</div>
+						<div className="flex-container">
 						<TextField hintText="Address Line 2" floatingLabelText="Address Line 2" 
-						underlineShow={false} value={addresses[i].AddressLine2}
+						underlineShow={false} value={addresses[i].AddressLine2} fullWidth={true}
 						name={"AddressLine2"} onChange={this.handleAddressChange} title={i}/>
+						</div>
+						<div className="flex-container">
 						<TextField hintText="City" floatingLabelText="City" underlineShow={false} 
 						name={"AddressCity"} title={i}
 						value={addresses[i].AddressCity} onChange={this.handleAddressChange}/>
@@ -172,7 +192,11 @@ class EditContactCard extends Component {
 						<TextField hintText="Country" floatingLabelText="Country" underlineShow={false} 
 						name={"AddressCountry"} title={i}
 						value={addresses[i].AddressCountry} onChange={this.handleAddressChange}/>
+						</div>
+						<div className="flex-container">
 						<DropDown />
+						<FlatButton onClick={this.handleDeleteAddress} name={i} label="Delete Address"/>
+						</div>
 					</div>
 				)
 			};

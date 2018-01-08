@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { dispatch, connect } from 'react-redux';
+import { persistStore, persistCombineReducers } from 'redux-persist';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
@@ -16,6 +17,7 @@ class HeaderBar extends Component {
 		}
 		this.logout = this.logout.bind(this);
 	}
+	
 	componentWillReceiveProps(props){
 		console.log(props);
 	}
@@ -33,6 +35,9 @@ class HeaderBar extends Component {
 				title: title
 			});
 		}
+		// persistStore(store, {}, () => {
+		// 	this.setState({rehydrated: true})
+		// })
 	}
 
 	logout() {
@@ -56,8 +61,8 @@ class HeaderBar extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-			isLoading: state.itemsIsLoading,
-			user: state.selectedUser
+		isLoading: state.itemsIsLoading,
+		user: state.selectedUser
 	};
 };
 
